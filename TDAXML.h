@@ -1,3 +1,6 @@
+#ifndef __TDAXML_H__
+#define __TDAXML_H__
+
 typedef struct TDAXML {
     char * tagPrincipal;
     TDAListaSimple atributos;
@@ -11,3 +14,5 @@ int xmlCargar(TDAXML * TDAXml, char * rutaXml);
 /* PRE: TDAXml correctamente inicializado en memoria
 POST: Guarda el TDAXML en el archivo xml que persistirá en rutaXml. */
 int xmlGuardar(TDAXML * TDAXml, char * rutaXml);
+
+#endif /* __TDAXML_H__ */
