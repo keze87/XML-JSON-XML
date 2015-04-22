@@ -1,0 +1,5 @@
+.directory
+*.o
+main
+*.exe
+*.gch
