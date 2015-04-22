@@ -1,4 +1,7 @@
 #include "TDACovertidor.h"
+#include "TDAJSON.h"
+#include "TDAXML.h"
+
 
 int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 {
