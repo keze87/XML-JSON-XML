@@ -1,13 +1,12 @@
 #ifndef __TDAXML_H__
 #define __TDAXML_H__
 
+#include "Lista.h"
 #include <stdio.h>
-
-typedef int TDAListaSimple; /*temporal*/
 
 typedef struct TDAXML {
 	char *tagPrincipal;
-	TDAListaSimple atributos;
+	TListaSimple atributos;
 	FILE *xmlFile;
 }TDAXML;
 

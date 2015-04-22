@@ -1,9 +1,11 @@
 #ifndef __TDAJSON_H__
 #define __TDAJSON_H__
+#include <stdio.h>
+#include "Lista.h"
 
 typedef struct TDAJSON {
 	char *tagPrincipal;
-	TDAListaSimple atributos;
+	TListaSimple atributos;
 	FILE *jsonFile;
 } TDAJSON;
 
