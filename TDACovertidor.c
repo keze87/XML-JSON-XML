@@ -17,4 +17,11 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 }
 
+TDAConvertidor *creartc()
+{
 
+	TDAConvertidor *tc = malloc(sizeof(TDAConvertidor));
+
+	return tc;
+
+}

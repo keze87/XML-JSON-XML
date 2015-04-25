@@ -19,6 +19,8 @@ POST: Convierte json a xml según las rutas especificadas.
 En caso de error devuelve el mensaje correspondiente. */
 int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml);
 
+TDAConvertidor *creartc();
+
 #endif /* __TDAConvertidor_H__ */
 
 
