@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 			case JSON2XML: printf("json2xml\n"); break;
 		}
 		printf("Ruta XML: %s\n",argv[posxml]);
-		printf("Ruta JSON: %s\n",argv[posjson]);
+		printf("Ruta JSON: %s\n\n",argv[posjson]);
 	}
 	/*Codigo solo para durante el desarrollo*/
 
