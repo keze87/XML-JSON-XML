@@ -10,7 +10,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 	int error;
 
-	error = jsonCargar(&tc->json,rutaJson);
+	error = xmlCargar(&tc->xml, rutaXml);
 
 	if (error != OK)
 	{
@@ -20,7 +20,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 	/*error = Magia*/
 
-	error = xmlGuardar(&tc->xml,rutaXml);
+	error = jsonGuardar(&tc->json, rutaJson);
 
 	if (error != OK)
 	{
@@ -37,7 +37,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 	int error;
 
-	error = xmlCargar(&tc->xml,rutaXml);
+	error = jsonCargar(&tc->json, rutaJson);
 
 	if (error != OK)
 	{
@@ -47,7 +47,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 	/*error = Magia*/
 
-	error = jsonGuardar(&tc->json,rutaJson);
+	error = xmlGuardar(&tc->xml, rutaXml);
 
 	if (error != OK)
 	{
