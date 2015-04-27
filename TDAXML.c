@@ -1,4 +1,5 @@
 #include "TDAXML.h"
+#define CANTMAX 255 /*tamaño maximo de linea*/
 
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 {
@@ -6,13 +7,19 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	FILE *archivoxml;
 	archivoxml = fopen(rutaXml, "r");
 
+	char linea[CANTMAX];
+    char * delimitadores = "<>";
+    char *ret;
+
 	if (archivoxml)
 	{
 
 		TDAXml->xmlFile = archivoxml;
 		printf("SE ABRIO!\n");
-
-
+        fgets(linea, CANTMAX, archivoxml);  /*leo la primer linea*/
+        ret=strtok(linea, delimitadores);
+        TDAXml->tagPrincipal=ret;           /*obtengo el tag principal*/
+        printf("TAG PRINCIPAL: %s.\n", TDAXml->tagPrincipal);
 
 		fclose(archivoxml);
 		printf("CARGO XML\n");
