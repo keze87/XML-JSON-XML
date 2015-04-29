@@ -9,7 +9,7 @@
 /*Lectura de argumentos*/
 /* Orden = el tipo de funcion que tengamos que usar.
  * posjson,posxml = el valor de argc que da a la ruta de cada uno*/
-void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml);
+void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml,int narg);
 
 int main(int argc, char *argv[])
 {
@@ -18,44 +18,38 @@ int main(int argc, char *argv[])
 	int posjson = 0;
 	int posxml = 0;
 	int error = 0;
+	int narg = 1; /* Inicia el for*/
 
-	TDAConvertidor *tc = creartc();
-
-	inicializar (argc,argv,&orden,&posjson,&posxml);
-
-	/*Codigo solo para durante el desarrollo*/
-	if (orden != 0)
+	do
 	{
-		printf("\nFuncion: ");
+
+		TDAConvertidor *tc = creartc();
+
+		inicializar (argc,argv,&orden,&posjson,&posxml,narg);
+
 		switch (orden)
 		{
-			case XML2JSON: printf("xml2json\n"); break;
-			case JSON2XML: printf("json2xml\n"); break;
+			case XML2JSON: error = xml2json(tc,argv[posxml],argv[posjson]); break;
+			case JSON2XML: error = json2xml(tc,argv[posjson],argv[posxml]); break;
+			default: fprintf(stderr,"Opcion incorrecta.\n");
 		}
-		printf("Ruta XML: %s\n",argv[posxml]);
-		printf("Ruta JSON: %s\n\n",argv[posjson]);
-	}
-	/*Codigo solo para durante el desarrollo*/
 
-	switch (orden)
-	{
-		case XML2JSON: error = xml2json(tc,argv[posxml],argv[posjson]); break;
-		case JSON2XML: error = json2xml(tc,argv[posjson],argv[posxml]); break;
-		default: fprintf(stderr,"Opcion incorrecta.\n");
-	}
+		free(tc);
 
-	free(tc);
+		narg = narg + 3;
+
+	}while (narg < argc);
 
 	return error;
 
 }
 
-void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml)
+void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml,int narg)
 {
 
 	int auxargc;
 
-	for (auxargc = 1; auxargc != argc; auxargc++)
+	for (auxargc = narg; auxargc != argc; auxargc++)
 	{
 
 		if ((strcmp(argv[auxargc],"-xml2json") == 0) && (*orden == 0))

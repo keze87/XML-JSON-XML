@@ -5,11 +5,13 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 {
 
 	FILE *archivoxml;
-	archivoxml = fopen(rutaXml, "r");
 
 	char linea[CANTMAX];
     char * delimitadores = "<>";
     char *ret;
+
+    archivoxml = fopen(rutaXml, "r");
+
 
 	if (archivoxml)
 	{
