@@ -11,6 +11,8 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	char linea; /*una letra*/
 
+	L_Crear(&TDAXml->atributos,CANTMAX);
+
 	archivoxml = fopen(rutaXml,"r");
 
 	values = fopen("values.DAT","w");
@@ -106,9 +108,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	if (archivoxml)
 	{
 
-		printf("SE ABRIO!\n");
-
-
+		/* Escribir la estructura a xml */
 
 		fclose(archivoxml);
 		printf("GUARDO XML\n");

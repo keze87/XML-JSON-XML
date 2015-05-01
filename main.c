@@ -20,23 +20,27 @@ int main(int argc, char *argv[])
 	int error = 0;
 	int narg = 1; /* Inicia el for*/
 
+	TDAConvertidor *tc;
+
 	do
 	{
 
-		TDAConvertidor *tc = creartc();
+		orden = 0;
+		posjson = 0;
+		posxml = 0;
+
+		tc = creartc();
 
 		inicializar (argc,argv,&orden,&posjson,&posxml,narg);
 
 		switch (orden)
 		{
-			case XML2JSON: error = xml2json(tc,argv[posxml],argv[posjson]); break;
-			case JSON2XML: error = json2xml(tc,argv[posjson],argv[posxml]); break;
-			default: fprintf(stderr,"Opcion incorrecta.\n");
+			case XML2JSON: error = xml2json(tc,argv[posxml],argv[posjson]); narg = narg + 3; break;
+			case JSON2XML: error = json2xml(tc,argv[posjson],argv[posxml]); narg = narg + 3; break;
+			default: fprintf(stderr,"Opcion incorrecta.\n"); narg = narg + 1;
 		}
 
 		free(tc);
-
-		narg = narg + 3;
 
 	}while (narg < argc);
 
@@ -47,10 +51,7 @@ int main(int argc, char *argv[])
 void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml,int narg)
 {
 
-	int auxargc;
-
-	for (auxargc = narg; auxargc != argc; auxargc++)
-	{
+	int auxargc = narg;
 
 		if ((strcmp(argv[auxargc],"-xml2json") == 0) && (*orden == 0))
 			*orden = XML2JSON;
@@ -58,22 +59,21 @@ void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml,in
 		{
 			if ((strcmp(argv[auxargc],"-json2xml") == 0) && (*orden == 0))
 				*orden = JSON2XML;
-			else
+		}
+
+		if ((*orden == XML2JSON) && (*posxml == 0))
+		{
+			*posxml = auxargc + 1;
+			*posjson = auxargc + 2;
+		}
+		else
+		{
+			if ((*orden == JSON2XML) && (*posjson == 0))
 			{
-
-				if ((*orden == XML2JSON) && (*posxml == 0))
-				{
-					*posxml = auxargc;
-					*posjson = auxargc + 1;
-				}
-
-				if ((*orden == JSON2XML) && (*posjson == 0))
-				{
-					*posjson = auxargc;
-					*posxml = auxargc + 1;
-				}
-
+				*posjson = auxargc + 1;
+				*posxml = auxargc + 2;
 			}
 		}
-	}
+
 }
+
