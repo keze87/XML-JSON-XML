@@ -1,6 +1,4 @@
-## Algo-Secreto
-
-Los comentarios/preguntas van a [issues](https://github.com/keze87/Algo-Secreto/issues).
+## Algo-Más-Secreto
 
 ## Licencia
 
