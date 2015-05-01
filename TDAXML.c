@@ -6,29 +6,92 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	FILE *archivoxml;
 
-	char linea[CANTMAX];
-    char * delimitadores = "<>";
-    char *ret;
+	FILE *values;
+	FILE *ids;
 
-    archivoxml = fopen(rutaXml, "r");
+	char linea; /*una letra*/
 
+	archivoxml = fopen(rutaXml,"r");
 
-	if (archivoxml)
+	values = fopen("values.DAT","w");
+	ids = fopen("ids.DAT","w");
+
+	if ((archivoxml) && (values) && (ids))
 	{
 
 		TDAXml->xmlFile = archivoxml;
-		printf("SE ABRIO!\n");
-        fgets(linea, CANTMAX, archivoxml);  /*leo la primer linea*/
-        ret=strtok(linea, delimitadores);
-        TDAXml->tagPrincipal=ret;           /*obtengo el tag principal*/
-        printf("TAG PRINCIPAL: %s.\n", TDAXml->tagPrincipal);
-
-		fclose(archivoxml);
-		printf("CARGO XML\n");
 
 	}
 	else
+	{
+
 		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
+
+		return 1;
+
+	}
+
+	linea = fgetc(archivoxml);
+
+	while (archivoxml)
+	{
+
+		if (linea == 60) /* < */
+		{
+
+			linea = fgetc(archivoxml);
+
+			if (linea == EOF)
+				break;
+
+			while (linea != 62) /* > */
+			{
+
+				fputc(linea,ids);
+
+				linea = fgetc(archivoxml);
+
+				if (linea == EOF)
+					break;
+
+			}
+
+			fputc(10,ids); /* \n */
+
+		}
+
+		if (linea == 62) /* > */
+		{
+
+			linea = fgetc(archivoxml);
+
+			if (linea == EOF)
+				break;
+
+			while (linea != 60) /* < */
+			{
+
+				if ((linea != 10/* \n */) && (linea != 9/* TAB */))
+					fputc(linea,values);
+
+				linea = fgetc(archivoxml);
+
+				if (linea == EOF)
+					break;
+
+			}
+
+			fputc(10,values); /* \n */
+
+		}
+
+		if (linea == EOF)
+			break;
+
+	}
+
+	fclose(ids);
+	fclose(values);
 
 	return 0;
 
