@@ -31,4 +31,10 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson);
 POST: Guarda el TDAJSON en el archivo json que persistirá en rutaJson. */
 int jsonGuardar(TDAJSON *TDAJson, char *rutaJson);
 
+/* @param  TDAJSON estructura que se destruirá
+ * @pre    TDAJSON creado
+ * @post   Se destruye la estructura
+ */
+void TDAJSON_Destruir(TDAJSON *TDAJSON);
+
 #endif /* __TDAJSON_H__ */
