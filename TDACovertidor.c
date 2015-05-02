@@ -114,16 +114,22 @@ int guardarxml (TDAConvertidor *tc, char *rutaXml)
 	/* Estructura a Archivo */
 
 	free(e11->id);
+	L_Vaciar(&e11->Level2);
 	free(e11);
+
 	free(e21->id);
 	free(e21->value);
+	L_Vaciar(&e21->Level3);
 	free(e21);
+
 	free(e31->id);
 	free(e31->value);
 	free(e31);
+
 	free(e32->id);
 	free(e32->value);
 	free(e32);
+
 	free(e33->id);
 	free(e33->value);
 	free(e33);
