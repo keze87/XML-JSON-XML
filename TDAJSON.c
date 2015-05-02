@@ -3,11 +3,11 @@
 
 #define CANTMAX 255 /*tamaño maximo de linea*/
 
-int TDAJSON_Crear(TDAJSON *TDAJSON, int tamElemento)
+int TDAJSON_Crear(TDAJSON *TDAJson, int tamElemento)
 {
-	if ((TDAJSON->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+	if ((TDAJson->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
-	L_Crear(&(TDAJSON->atributos),tamElemento);
+	L_Crear(&(TDAJson->atributos),tamElemento);
 	return 0;
 }
 
@@ -58,4 +58,10 @@ int jsonGuardar(TDAJSON *TDAJson, char *rutaJson)
 
 	return 0;
 
+}
+
+void TDAJSON_Destruir(TDAJSON *TDAJson)
+{
+	free(TDAJson->tagPrincipal);
+	L_Vaciar(&(TDAJson->atributos));
 }
