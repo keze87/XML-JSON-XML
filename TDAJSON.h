@@ -1,7 +1,8 @@
 #ifndef __TDAJSON_H__
 #define __TDAJSON_H__
-#include <stdio.h>
+
 #include "Lista.h"
+#include <stdio.h>
 
 typedef struct TDAJSON {
 	char *tagPrincipal;
@@ -9,8 +10,21 @@ typedef struct TDAJSON {
 	FILE *jsonFile;
 } TDAJSON;
 
-/* PRE: No tiene
-POST: Inicializa el TDAJSON con el archivo xml que persiste en rutaJson. */
+/* @param  TDAJSON estructura que se creará
+ * @param  tamElemento tamaño del elemento de la lista
+ * @pre    -
+ * @post   Si se puede crear la estructura, devuelve 0
+ * @post   Si no se puede crear la estructura, devuelve -1
+ */
+int TDAJSON_Crear(TDAJSON *TDAJSON, int tamElemento);
+
+/* @param  TDAJson estrucutra que se cargará
+ * @param  rutaJson path del archivo xml
+ * @pre    TDAJson creado
+ * @post   Si se puede cargar la estructura, devuelve 0
+ * @post   Si no se puede acceder a la ruta para lectura, devuelve -1
+ * @post   Si existe un error de sintaxis en el archivo, devuelve el número de línea
+ */
 int jsonCargar(TDAJSON *TDAJson, char *rutaJson);
 
 /* PRE: TDAJSON correctamente inicializado en memoria
