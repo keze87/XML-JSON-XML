@@ -10,13 +10,13 @@ typedef struct TDAXML {
 	FILE *xmlFile;
 }TDAXML;
 
-/* @param  TDAXML estructura que se creará
+/* @param  TDAXml estructura que se creará
  * @param  tamElemento tamaño del elemento de la lista
  * @pre    -
  * @post   Si se puede crear la estructura, devuelve 0
  * @post   Si no se puede crear la estructura, devuelve -1
  */
-int TDAXML_Crear(TDAXML *TDAXML, int tamElemento);
+int TDAXML_Crear(TDAXML *TDAXml, int tamElemento);
 
 /* @param  TDAXml estrucutra que se cargará
  * @param  rutaXml path del archivo xml
@@ -30,5 +30,11 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml);
 /* PRE: TDAXml correctamente inicializado en memoria
 POST: Guarda el TDAXML en el archivo xml que persistirá en rutaXml. */
 int xmlGuardar(TDAXML *TDAXml, char *rutaXml);
+
+/* @param  TDAXml estructura que se destruirá
+ * @pre    TDAXml creado
+ * @post   Se destruye la estructura
+ */
+void TDAXML_Destruir(TDAXML *TDAXml);
 
 #endif /* __TDAXML_H__ */
