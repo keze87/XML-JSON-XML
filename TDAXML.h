@@ -11,11 +11,12 @@ typedef struct TDAXML {
 }TDAXML;
 
 /* @param  TDAXML estructura que se creará
+ * @param  tamElemento tamaño del elemento de la lista
  * @pre    -
  * @post   Si se puede crear la estructura, devuelve 0
  * @post   Si no se puede crear la estructura, devuelve -1
  */
-int TDAXML_Crear(TDAXML *TDAXML);
+int TDAXML_Crear(TDAXML *TDAXML, int tamElemento);
 
 /* @param  TDAXml estrucutra que se cargará
  * @param  rutaXml path del archivo xml
