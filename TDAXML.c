@@ -3,11 +3,11 @@
 
 #define CANTMAX 255 /*tamaño maximo de linea*/
 
-int TDAXML_Crear(TDAXML *TDAXML, int tamElemento)
+int TDAXML_Crear(TDAXML *TDAXml, int tamElemento)
 {
-	if ((TDAXML->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
-	L_Crear(&(TDAXML->atributos),tamElemento);
+	L_Crear(&(TDAXml->atributos),tamElemento);
 	return 0;
 }
 
@@ -66,4 +66,10 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 
 	return 0;
 
+}
+
+void TDAXML_Destruir(TDAXML *TDAXml)
+{
+	free(TDAXml->tagPrincipal);
+	L_Vaciar(&(TDAXml->atributos));
 }
