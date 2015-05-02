@@ -1,5 +1,14 @@
 #include "TDAXML.h"
-#define CANTMAX 255 /*tamaño maximo de linea*/
+#include "Lista.h"
+
+#define CANTMAX 255 /*tamaÃ±o maximo de linea*/
+
+int TDAXML_Crear(TDAXML *TDAXML, int tamElemento)
+{
+	if ((TDAXML->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+		return -1;
+	L_Crear(&(TDAXML->atributos),tamElemento);
+}
 
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 {
