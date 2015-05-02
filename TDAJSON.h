@@ -10,13 +10,13 @@ typedef struct TDAJSON {
 	FILE *jsonFile;
 } TDAJSON;
 
-/* @param  TDAJSON estructura que se creará
+/* @param  TDAJson estructura que se creará
  * @param  tamElemento tamaño del elemento de la lista
  * @pre    -
  * @post   Si se puede crear la estructura, devuelve 0
  * @post   Si no se puede crear la estructura, devuelve -1
  */
-int TDAJSON_Crear(TDAJSON *TDAJSON, int tamElemento);
+int TDAJSON_Crear(TDAJSON *TDAJson, int tamElemento);
 
 /* @param  TDAJson estrucutra que se cargará
  * @param  rutaJson path del archivo xml
@@ -31,10 +31,10 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson);
 POST: Guarda el TDAJSON en el archivo json que persistirá en rutaJson. */
 int jsonGuardar(TDAJSON *TDAJson, char *rutaJson);
 
-/* @param  TDAJSON estructura que se destruirá
- * @pre    TDAJSON creado
+/* @param  TDAJson estructura que se destruirá
+ * @pre    TDAJson creado
  * @post   Se destruye la estructura
  */
-void TDAJSON_Destruir(TDAJSON *TDAJSON);
+void TDAJSON_Destruir(TDAJSON *TDAJson);
 
 #endif /* __TDAJSON_H__ */
