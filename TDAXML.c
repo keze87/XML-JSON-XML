@@ -8,6 +8,7 @@ int TDAXML_Crear(TDAXML *TDAXML, int tamElemento)
 	if ((TDAXML->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
 	L_Crear(&(TDAXML->atributos),tamElemento);
+	return 0;
 }
 
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
