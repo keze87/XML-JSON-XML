@@ -14,10 +14,10 @@ void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml,in
 int main(int argc, char *argv[])
 {
 
-	int orden = 0;
-	int posjson = 0;
-	int posxml = 0;
-	int error = 0;
+	int orden;
+	int posjson;
+	int posxml;
+	int error;
 	int narg = 1; /* Posicion inicio de inicializar */
 
 	TDAConvertidor *tc;
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 		{
 			case XML2JSON: error = xml2json(tc,argv[posxml],argv[posjson]); narg = narg + 3; break;
 			case JSON2XML: error = json2xml(tc,argv[posjson],argv[posxml]); narg = narg + 3; break;
-			case 3: error = guardarxml(tc,argv[posxml]); free(tc); return 0;
+			case 3: error = guardarxml(tc,argv[posxml]); narg = narg + 2; break;
 			default: fprintf(stderr,"Opcion incorrecta.\n"); narg = narg + 1;
 		}
 
