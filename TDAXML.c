@@ -33,7 +33,12 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	}
 
-	linea = fgetc(archivoxml);
+	do
+	{
+
+		linea = fgetc(archivoxml);
+
+	}while ((linea != 60) && (linea != 62) && (linea != EOF));
 
 	while (archivoxml)
 	{

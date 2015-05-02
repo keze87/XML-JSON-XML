@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "TDACovertidor.h"
+#include "TDAConvertidor.h"
 
 #define XML2JSON 1
 #define JSON2XML 2
