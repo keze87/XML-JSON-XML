@@ -4,27 +4,25 @@
 #include "TDAXML.h"
 #include "TDAJSON.h"
 
+typedef enum TInterruptor{
+	Abierto = 0,
+	Cerrado = 1
+}TInterruptor;
+
 typedef struct TDAConvertidor{
 	TDAXML xml;
 	TDAJSON json;
 }TDAConvertidor;
 
-typedef struct Nivel1{
-	char* id;
-	/*char* value;*/
-	TListaSimple Level2;
-}Nivel1;
+typedef struct TDelimitador{
+	char *id;
+	TInterruptor estado;
+}TDelimitador;
 
-typedef struct Nivel2{
-	char* id;
-	char* value;
-	TListaSimple Level3;
-}Nivel2;
-
-typedef struct Nivel3{
-	char* id;
-	char* value;
-}Nivel3;
+typedef struct TElem{
+	char *id;
+	char *value;
+}TElem;
 
 /* PRE: No tiene.
 POST: Convierte xml a json según las rutas especificadas.
@@ -38,7 +36,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml);
 
 TDAConvertidor *creartc();
 
-int guardarxml (TDAConvertidor *tc, char *rutaXml);
+int guardarxml (char *rutaXml);
 
 #endif /* __TDAConvertidor_H__ */
 

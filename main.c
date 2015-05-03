@@ -6,8 +6,8 @@
 #define XML2JSON 1
 #define JSON2XML 2
 
-/*Lectura de argumentos*/
-/* Orden = el tipo de funcion que tengamos que usar.
+/*Lectura de argumentos
+ * Orden = el tipo de funcion que tengamos que usar.
  * posjson,posxml = el valor de argc que da a la ruta de cada uno*/
 void inicializar(int argc, char **argv, int *orden, int *posjson, int *posxml,int narg);
 
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
 	TDAConvertidor *tc;
 
-	do
+	while (narg < argc)
 	{
 
 		orden = 0;
@@ -37,13 +37,13 @@ int main(int argc, char *argv[])
 		{
 			case XML2JSON: error = xml2json(tc,argv[posxml],argv[posjson]); narg = narg + 3; break;
 			case JSON2XML: error = json2xml(tc,argv[posjson],argv[posxml]); narg = narg + 3; break;
-			case 3: error = guardarxml(tc,argv[posxml]); narg = narg + 2; break;
+			case 3: error = guardarxml(argv[posxml]); narg = narg + 2; break;
 			default: fprintf(stderr,"Opcion incorrecta.\n"); narg = narg + 1;
 		}
 
 		free(tc);
 
-	}while (narg < argc);
+	}
 
 	return error;
 
