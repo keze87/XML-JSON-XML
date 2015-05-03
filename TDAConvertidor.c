@@ -43,58 +43,53 @@ int guardarxml (TDAConvertidor *tc, char *rutaXml)
 
 	/** Definicion de estructura */
 
-	Nivel1 *e11 = (Nivel1*)malloc(sizeof(Nivel1));
-		Nivel2 *e21 = (Nivel2*)malloc(sizeof(Nivel2));
-			Nivel3 *e31 = (Nivel3*)malloc(sizeof(Nivel3));
-			Nivel3 *e32 = (Nivel3*)malloc(sizeof(Nivel3));
-			Nivel3 *e33 = (Nivel3*)malloc(sizeof(Nivel3));
+	Nivel1 *e1 = (Nivel1*)malloc(sizeof(Nivel1));
+		Nivel2 *e2 = (Nivel2*)malloc(sizeof(Nivel2));
+			Nivel3 *e3 = (Nivel3*)malloc(sizeof(Nivel3));
 
-	e11->id = malloc(255);
-	e21->id = malloc(255);
-	e21->value = malloc(255);
-	e31->id = malloc(255);
-	e31->value = malloc(255);
-	e32->id = malloc(255);
-	e32->value = malloc(255);
-	e33->id = malloc(255);
-	e33->value = malloc(255);
 
-	*e11->id = 0;
-	*e21->id = 0;
-	*e31->id = 0;
-	*e32->id = 0;
-	*e33->id = 0;
-	*e33->value = 0;
-	*e32->value = 0;
-	*e31->value = 0;
-	*e21->value = 0;
+	e1->id = malloc(255);
+	e2->id = malloc(255);
+	e2->value = malloc(255);
+	e3->id = malloc(255);
+	e3->value = malloc(255);
+
+	L_Crear(&e1->Level2,sizeof(Nivel2));
+
+	L_Crear(&e2->Level3,sizeof(Nivel3));
+
+	*e1->id = 0;
+	*e2->id = 0;
+	*e3->id = 0;
+	*e3->value = 0;
+	*e2->value = 0;
 
 	/* Nivel 3 */
-	strcpy(e31->id,"New");
-	strcpy(e31->value,"CreateNewDoc()");
+	strcpy(e3->id,"New");
+	strcpy(e3->value,"CreateNewDoc()");
 
-	strcpy(e32->id,"Open");
-	strcpy(e32->value,"OpenDoc()");
+	L_Insertar_Cte(&e2->Level3,L_Siguiente,e3);
 
-	strcpy(e33->id,"Open");
-	strcpy(e33->value,"OpenDoc()");
+	strcpy(e3->id,"Open");
+	strcpy(e3->value,"OpenDoc()");
+
+	L_Insertar_Cte(&e2->Level3,L_Siguiente,e3);
+
+	strcpy(e3->id,"Close");
+	strcpy(e3->value,"CloseDoc()");
+
+	L_Insertar_Cte(&e2->Level3,L_Siguiente,e3);
 	/* Nivel 3 */
 
 	/* Nivel 2 */
-	strcpy(e21->id,"file");
-	strcpy(e21->value,"File");
+	strcpy(e2->id,"file");
+	strcpy(e2->value,"File");
 
-	L_Crear(&e21->Level3,sizeof(Nivel3));
-
-	L_Insertar_Cte(&e21->Level3,L_Primero,e31);
-	L_Insertar_Cte(&e21->Level3,L_Siguiente,e32);
-	L_Insertar_Cte(&e21->Level3,L_Siguiente,e33);
+	L_Insertar_Cte(&e1->Level2,L_Siguiente,e2);
 	/* Nivel 2 */
 
 	/* Nivel 1 */
-	strcpy(e11->id,"menu");
-	L_Crear(&e11->Level2,sizeof(Nivel2));
-	L_Insertar_Cte(&e11->Level2,L_Primero,e21);
+	strcpy(e1->id,"menu");
 	/* Nivel 1 */
 
 	/** Definicion de estructura */
@@ -113,26 +108,18 @@ int guardarxml (TDAConvertidor *tc, char *rutaXml)
 
 	/* Estructura a Archivo */
 
-	free(e11->id);
-	L_Vaciar(&e11->Level2);
-	free(e11);
+	free(e1->id);
+	L_Vaciar(&e1->Level2);
+	free(e1);
 
-	free(e21->id);
-	free(e21->value);
-	L_Vaciar(&e21->Level3);
-	free(e21);
+	free(e2->id);
+	free(e2->value);
+	L_Vaciar(&e2->Level3);
+	free(e2);
 
-	free(e31->id);
-	free(e31->value);
-	free(e31);
-
-	free(e32->id);
-	free(e32->value);
-	free(e32);
-
-	free(e33->id);
-	free(e33->value);
-	free(e33);
+	free(e3->id);
+	free(e3->value);
+	free(e3);
 
 	return error;
 
