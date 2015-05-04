@@ -1,10 +1,13 @@
 #include "TDAXML.h"
 #include "Lista.h"
+#include "TDAConvertidor.h"
 
 #define CANTMAX 255 /*tamaño maximo de linea*/
 
 int TDAXML_Crear(TDAXML *TDAXml, int tamElemento)
 {
+
+	TDAXml = malloc(sizeof(TDAXML));
 
 	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
@@ -20,10 +23,10 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	FILE *archivoxml;
 
-	/*Temporal*/
-	FILE *values = fopen("values.DAT","w");
-	FILE *ids = fopen("ids.DAT","w");
-	/*Temporal*/
+	int error;
+
+	TElem* Elem = (TElem*)malloc(sizeof(TElem));
+	TDelimitador* Delimitador = (TDelimitador*)malloc(sizeof(TDelimitador));
 
 	/*char linea[CANTMAX];
 	char * delimitadores = "<>";
@@ -31,26 +34,38 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	char letra;
 
+	/*Malloc*/
 	char* id = malloc (255); /* donde voy guardando las letras */
 	char* value = malloc (255);
 	*id = 0;
 	*value = 0;
+	Elem->id = malloc(255);
+	Elem->value = malloc(255);
+	Delimitador->id = malloc(255);
+	Delimitador->estado = (TInterruptor)malloc(sizeof(TInterruptor));
+
+	/*error = TDAXML_Crear(TDAXml,sizeof(TElem)); No lo puedo hacer andar*/
+
+	TDAXml = malloc(sizeof(TDAXML));
+	L_Crear(&(TDAXml->atributos),sizeof(TInterruptor));
+
+	/*Malloc*/
 
 	archivoxml = fopen(rutaXml, "r");
 
-	if ((archivoxml) && (values) && (ids))
+	if (archivoxml)
 	{
 
-		/*TDAXml->xmlFile = archivoxml;*/		/*No tiene memoria*/
+		TDAXml->xmlFile = archivoxml;
 
 		/*printf("SE ABRIO!\n");
 		fgets(linea, CANTMAX, archivoxml);	leo la primer linea
 		ret=strtok(linea, delimitadores);
 		TDAXml->tagPrincipal=ret;			obtengo el tag principal
 		printf("TAG PRINCIPAL: %s.\n", TDAXml->tagPrincipal);
-		fclose(archivoxml);*/
+		fclose(archivoxml);
 
-		printf("CARGO XML\n");
+		printf("CARGO XML\n");*/
 
 	}
 	else
@@ -86,8 +101,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			while (letra != 62) /* > */
 			{
 
-				fputc(letra,ids);
-
 				id[strlen(id)] = letra;
 
 				letra = fgetc(archivoxml);
@@ -97,7 +110,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			}
 
-			fputc(10,ids); /* \n */
 			printf("%s\n",id);
 
 		}
@@ -116,10 +128,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			while (letra != 60) /* < */
 			{
 
-				id[strlen(id)] = letra;
-
-				if ((letra != 10/* \n */) && (letra != 9/* TAB */))
-					fputc(letra,values);
+				value[strlen(value)] = letra;
 
 				letra = fgetc(archivoxml);
 
@@ -128,19 +137,47 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			}
 
-			fputc(10,values); /* \n */
-			printf("%s\n",id);
+			if ((value[0] != 10/* \n */) && (value[0] != 9/* TAB */))
+				printf("%s\n",value);
 
 		}
 
+		if ((value[0] != 10) && (value[0] != 0))
+		{
+
+			strcpy(Delimitador->id,id);
+			Delimitador->estado = Abierto;
+
+			error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Delimitador);
+
+			strcpy(Elem->id,id); /* Falta agregar Elem->value, habria que fijarse si está vacio y escribir ahí*/
+
+			error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Elem);
+
+		}
+		else
+		{
+
+			strcpy(Delimitador->id,id);
+			if (id[0] != 47)
+				Delimitador->estado = Abierto;
+			else
+				Delimitador->estado = Cerrado;
+
+			error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Delimitador);
+
+		}
+			/*si empieza con "/"" cerrado sino abierto*/
 	}
 
-	fclose(ids);
-	fclose(values);
 	free(id);
 	free(value);
+	free(Elem);
+	free(Delimitador);
 
-	return 0;
+	L_Vaciar(&TDAXml->atributos); /*Esto no tiene que estar acá*/
+
+	return error;
 
 }
 
