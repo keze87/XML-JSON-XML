@@ -47,7 +47,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	/*error = TDAXML_Crear(TDAXml,sizeof(TElem)); No lo puedo hacer andar*/
 
 	TDAXml = malloc(sizeof(TDAXML));
-	L_Crear(&(TDAXml->atributos),sizeof(TInterruptor));
+	L_Crear(&(TDAXml->atributos),sizeof(TElem));
 
 	/*Malloc*/
 
