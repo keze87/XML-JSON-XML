@@ -5,6 +5,7 @@
 #define MAX_LONG_RUTA 100
 #define C_NULO '\0'
 
+#define WRONG_OPE "La operación ingresada es incorrecta.\nDebe ser una de las siguientes:\n-xml2son\n-json2xml\n"
 #define OUT_OF_MEM "No existe suficiente memoria.\n"
 #define RUTA_ORIGEN "Debe ingresar una ruta de origen a la que se pueda acceder para lectura.\n Debe ubicarse seguido de la operación a realizar.\n"
 #define RUTA_DESTINO "Debe ingresar una ruta de destino a la que se pueda acceder para escritura.\n Debe ubicarse seguido de la ruta de origen.\n"
@@ -113,26 +114,32 @@ int main(int argc, char *argv[])
                     }
                     else /* Es el último argumento y no tengo la ruta de origen */
                         Code = ORIG;
-                    switch (Ope)
-                    {
-                        case (XML2JSON):
+                    if (Code == SUCCESS) {
+                        switch (Ope)
                         {
-                            Code = xml2json(TC,RutaOrigen,RutaDestino);
-                            break;
+                            case (XML2JSON):
+                            {
+                                Code = xml2json(TC,RutaOrigen,RutaDestino);
+                                break;
+                            }
+                            case (JSON2XML):
+                            {
+                                Code = json2xml(TC,RutaOrigen,RutaDestino);
+                                break;
+                            }
+                            default: break;
                         }
-                        case (JSON2XML):
-                        {
-                            Code = json2xml(TC,RutaOrigen,RutaDestino);
-                            break;
-                        }
-                        default: break;
                     }
                 }
             } while ((++i < argc) && (Code==SUCCESS));
         }
         DestruirTC(TC);
     }
+    if (Ope == ERROR)
+        printf(WRONG_OPE);
     if (Code != SUCCESS)
         MostrarMensajeError(Code);
+    free(RutaOrigen);
+    free(RutaDestino);
     return EXIT_SUCCESS;
 }
