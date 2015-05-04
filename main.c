@@ -66,10 +66,10 @@ void MostrarMensajeError(tError Code)
 	}
 }
 
-/* Funcion que se encarga de inicializar una cadena de caracteres char *
+/* Funcion que se encarga de inicializar una cadena de caracteres char*
  * @param  s   cadena de caracteres a inicializar
- * @pos	devuelve MEM - error de memoria - si no puede asignar memoria
- *		 devuelve SUCCESS e inicializa la cadena si puede asignar memoria
+ * @pos devuelve MEM - error de memoria - si no puede asignar memoria
+ * devuelve SUCCESS e inicializa la cadena si puede asignar memoria
  */
 tError InicializarString(char* s)
 {
