@@ -4,10 +4,25 @@
 #include "TDAXML.h"
 #include "TDAJSON.h"
 
+typedef enum TInterruptor{
+	Abierto = 0,
+	Cerrado = 1
+}TInterruptor;
+
 typedef struct TDAConvertidor{
-    TDAXML xml;
-    TDAJSON json;
+	TDAXML xml;
+	TDAJSON json;
 }TDAConvertidor;
+
+typedef struct TDelimitador{
+	char *id;
+	TInterruptor estado;
+}TDelimitador;
+
+typedef struct TElem{
+	char *id;
+	char *value;
+}TElem;
 
 /* PRE: No tiene.
 POST: Convierte xml a json según las rutas especificadas.

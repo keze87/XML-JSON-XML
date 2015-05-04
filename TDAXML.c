@@ -5,12 +5,14 @@
 
 int TDAXML_Crear(TDAXML *TDAXml, int tamElemento)
 {
+
 	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
 
 	L_Crear(&(TDAXml->atributos),tamElemento);
 
 	return 0;
+
 }
 
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
@@ -27,27 +29,27 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	char * delimitadores = "<>";
 	char *ret;*/
 
-	char linea; /* una letra */
-	char* string = malloc (255); /* donde voy guardando las letras */
+	char letra;
 
-
+	char* id = malloc (255); /* donde voy guardando las letras */
+	char* value = malloc (255);
+	*id = 0;
+	*value = 0;
 
 	archivoxml = fopen(rutaXml, "r");
-
 
 	if ((archivoxml) && (values) && (ids))
 	{
 
 		/*TDAXml->xmlFile = archivoxml;*/		/*No tiene memoria*/
 
-
 		/*printf("SE ABRIO!\n");
-		fgets(linea, CANTMAX, archivoxml);*/	/*leo la primer linea*/
-		/*ret=strtok(linea, delimitadores);
-		TDAXml->tagPrincipal=ret;*/			/*obtengo el tag principal*/
-		/*printf("TAG PRINCIPAL: %s.\n", TDAXml->tagPrincipal);
-
+		fgets(linea, CANTMAX, archivoxml);	leo la primer linea
+		ret=strtok(linea, delimitadores);
+		TDAXml->tagPrincipal=ret;			obtengo el tag principal
+		printf("TAG PRINCIPAL: %s.\n", TDAXml->tagPrincipal);
 		fclose(archivoxml);*/
+
 		printf("CARGO XML\n");
 
 	}
@@ -63,70 +65,80 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	do
 	{
 
-		linea = fgetc(archivoxml);
+		letra = fgetc(archivoxml);
 
-	}while ((linea != 60) && (linea != 62) && (linea != EOF));
+	}while ((letra != 60) && (letra != 62) && (letra != EOF));
 
-	while (archivoxml)
+	while (letra != EOF)
 	{
 
-		if (linea == 60) /* < */
+		if (letra == 60) /* < */
 		{
 
-			linea = fgetc(archivoxml);
+			memset(id,0,strlen(id));
+			memset(value,0,strlen(value));
 
-			if (linea == EOF)
+			letra = fgetc(archivoxml);
+
+			if (letra == EOF)
 				break;
 
-			while (linea != 62) /* > */
+			while (letra != 62) /* > */
 			{
 
-				fputc(linea,ids);
+				fputc(letra,ids);
 
-				linea = fgetc(archivoxml);
+				id[strlen(id)] = letra;
 
-				if (linea == EOF)
+				letra = fgetc(archivoxml);
+
+				if (letra == EOF)
 					break;
 
 			}
 
 			fputc(10,ids); /* \n */
+			printf("%s\n",id);
 
 		}
 
-		if (linea == 62) /* > */
+		if (letra == 62) /* > */
 		{
 
-			linea = fgetc(archivoxml);
+			memset(id,0,strlen(id));
+			memset(value,0,strlen(value));
 
-			if (linea == EOF)
+			letra = fgetc(archivoxml);
+
+			if (letra == EOF)
 				break;
 
-			while (linea != 60) /* < */
+			while (letra != 60) /* < */
 			{
 
-				if ((linea != 10/* \n */) && (linea != 9/* TAB */))
-					fputc(linea,values);
+				id[strlen(id)] = letra;
 
-				linea = fgetc(archivoxml);
+				if ((letra != 10/* \n */) && (letra != 9/* TAB */))
+					fputc(letra,values);
 
-				if (linea == EOF)
+				letra = fgetc(archivoxml);
+
+				if (letra == EOF)
 					break;
 
 			}
 
 			fputc(10,values); /* \n */
+			printf("%s\n",id);
 
 		}
-
-		if (linea == EOF)
-			break;
 
 	}
 
 	fclose(ids);
 	fclose(values);
-	free(string);
+	free(id);
+	free(value);
 
 	return 0;
 
