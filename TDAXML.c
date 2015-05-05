@@ -252,7 +252,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	}
 	/* Escribo el tagPrincipal */
 	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
-	fprintf('\n');
+	fprintf(arch,'\n');
 	EscribirTabs(++nivel, arch);
 	/* Comienzo a recorrer la lista de atributos */
 	if (L_Vacia(TDAXml->atributos)!=0) {
