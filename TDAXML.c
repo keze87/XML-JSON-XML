@@ -98,7 +98,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 		return -1;
 	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
 		return -2;
-	/*error = TDAXML_Crear(TDAXml,sizeof(TElem)); No lo puedo hacer andar*/
 
 	L_Crear(&(TDAXml->atributos),sizeof(TElem));
 
@@ -110,15 +109,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	{
 
 		TDAXml->xmlFile = archivoxml;
-
-		/*printf("SE ABRIO!\n");
-		fgets(linea, CANTMAX, archivoxml);	leo la primer linea
-		ret=strtok(linea, delimitadores);
-		TDAXml->tagPrincipal=ret;			obtengo el tag principal
-		printf("TAG PRINCIPAL: %s.\n", TDAXml->tagPrincipal);
-		fclose(archivoxml);
-
-		printf("CARGO XML\n");*/
 
 	}
 	else
@@ -220,7 +210,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Delimitador);
 
 		}
-			/*si empieza con "/"" cerrado sino abierto*/
+			/*si empieza con "/" cerrado sino abierto*/
 	}
 
 	free(id);
@@ -229,6 +219,9 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	free(Delimitador);
 
 	L_Vaciar(&TDAXml->atributos); /*Esto no tiene que estar acá*/
+
+	if (error == 1)
+		error = 0; /* Lista.h está al verrez */
 
 	return error;
 
