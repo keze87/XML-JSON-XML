@@ -11,7 +11,7 @@ typedef enum {
 	ELEM, /* Es un elemento */
 	DELIM, /* Es un delimitador */
 	VACIO /* Aún no se definió */
-} tTipo
+} tTipo;
 
 typedef struct {
 	tTipo Tipo;
@@ -19,7 +19,7 @@ typedef struct {
 	char *Value;
 } tElem;
 
-/* Inicializa tElem 
+/* Inicializa tElem
  * Si no existe suficiente memoria para inicializar la estructura devuelve -1
  */
 int tElem_Inicializar(tElem* aux)
