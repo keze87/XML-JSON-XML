@@ -6,6 +6,7 @@
 
 int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 {
+	FILE *archivojson;
 	/* Inicializo el TDAJSON */
 	if ((TDAJson->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
@@ -13,7 +14,6 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
         	return -2;
 	L_Crear(&(TDAJson->atributos),TAM_ELEM);
 	/* Comienza el proceso de cargado */
-	FILE *archivojson;
 	archivojson = fopen(rutaJson, "r");
 
 	if (archivojson)

@@ -31,6 +31,8 @@ int tElem_Inicializar(tElem* aux)
 		return -1;
 	}
 	aux->Tipo=VACIO;
+
+	return 0;
 }
 
 /* Libera la memoria utilizada por tElem */
@@ -71,13 +73,7 @@ void EscribirAtributo_Cierre(char* at, FILE* arch)
 
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 {
-	/* Inicializo el TDAXML */
-	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
-		return -1;
-	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
-        	return -2;
-	L_Crear(&(TDAXml->atributos),TAM_ELEM);
-	/* Comienza el proceso de cargado */
+
 	FILE *archivoxml;
 
 	int error;
@@ -100,7 +96,10 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	Elem->value = malloc(255);
 	Delimitador->id = malloc(255);
 	Delimitador->estado = (TInterruptor)malloc(sizeof(TInterruptor));
-
+	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+		return -1;
+	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
+        	return -2;
 	/*error = TDAXML_Crear(TDAXml,sizeof(TElem)); No lo puedo hacer andar*/
 
 	TDAXml = malloc(sizeof(TDAXML));
@@ -240,10 +239,10 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 {
-	tElem* Aux;
-	FILE *arch;
+	tElem* Aux = malloc(sizeof(TElem));
+	FILE *arch = fopen(rutaXml,"w");
 	int code = 0;
-	int nivel = 0; /* Se utiliza para saber cuantos 'tabs' imprimir en el archivo */
+	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
 	if (tElem_Inicializar(Aux) != 0)
 		return -1;
 	if ((arch = fopen(rutaXml, "w")) == NULL) { /* No se pudo abrir el archivo */
@@ -252,7 +251,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	}
 	/* Escribo el tagPrincipal */
 	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
-	fprintf(arch,'\n');
+	fprintf(arch,"\n");
 	EscribirTabs(++nivel, arch);
 	/* Comienzo a recorrer la lista de atributos */
 	if (L_Vacia(TDAXml->atributos)!=0) {
@@ -262,12 +261,12 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 			if (EsDelimitador(*Aux)==0) { /* Es un delimitador */
 				if (strcmp(Aux->Value,DELIM_OPEN)==0) { /* Es apertura */
 					EscribirAtributo_Apertura(Aux->Atributo, arch);
-					fprintf(arch, '\n');
+					fprintf(arch, "\n");
 					EscribirTabs(++nivel,arch);
 				}
 				else { /* Es cierre */
 					EscribirAtributo_Cierre(Aux->Atributo, arch);
-					fprintf(arch, '\n');
+					fprintf(arch, "\n");
 					EscribirTabs(--nivel,arch);
 				}
 			}
@@ -275,7 +274,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 				EscribirAtributo_Apertura(Aux->Atributo, arch);
 				fputs(Aux->Value, arch);
 				EscribirAtributo_Cierre(Aux->Atributo, arch);
-				fprintf(arch, '\n');
+				fprintf(arch, "\n");
 				EscribirTabs(nivel,arch);
 			}
 		} while ((code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente)) != 0);
