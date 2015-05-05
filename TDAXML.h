@@ -25,9 +25,10 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml);
  * @param  rutaXml path de destino
  * @pre    TDAXml creado y cargado
  * @post   Si se puede grabar la estructura en un archivo, devuelve 0
- * @post   Si no se puede acceder a la ruta para escritura, devuelve -1
+ * @post   Si no existe suficiente memoria, devuelve -1
+ * @post   Si no se puede acceder a la ruta para escritura, devuelve -2
  */
-int TDAXML_Guardar(TDAXML *TDAXml, char *rutaXml);
+int xmlGuardar(TDAXML *TDAXml, char *rutaXml);
 
 /* @param  TDAXml estructura que se destruirá
  * @pre    TDAXml creado
