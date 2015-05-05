@@ -2,18 +2,17 @@
 #include "Lista.h"
 
 #define CANTMAX 255 /*tamaño maximo de linea*/
-
-int TDAJSON_Crear(TDAJSON *TDAJson, int tamElemento)
-{
-	if ((TDAJson->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
-		return -1;
-	L_Crear(&(TDAJson->atributos),tamElemento);
-	return 0;
-}
+#define TAM_ELEM 200
 
 int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 {
-
+	/* Inicializo el TDAJSON */
+	if ((TDAJson->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+		return -1;
+	if ((TDAJson->jsonFile = fopen(rutaJson, "r")) == NULL)
+        	return -2;
+	L_Crear(&(TDAJson->atributos),TAM_ELEM);
+	/* Comienza el proceso de cargado */
 	FILE *archivojson;
 	archivojson = fopen(rutaJson, "r");
 
