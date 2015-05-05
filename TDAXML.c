@@ -77,15 +77,10 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	FILE *archivoxml;
 
 	int error;
+	char letra;
 
 	TElem* Elem = (TElem*)malloc(sizeof(TElem));
 	TDelimitador* Delimitador = (TDelimitador*)malloc(sizeof(TDelimitador));
-
-	/*char linea[CANTMAX];
-	char * delimitadores = "<>";
-	char *ret;*/
-
-	char letra;
 
 	/*Malloc*/
 	char* id = malloc (255); /* donde voy guardando las letras */
@@ -96,13 +91,15 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	Elem->value = malloc(255);
 	Delimitador->id = malloc(255);
 	Delimitador->estado = (TInterruptor)malloc(sizeof(TInterruptor));
+
+	TDAXml = malloc(sizeof(TDAXML));
+
 	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
 	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
-        	return -2;
+		return -2;
 	/*error = TDAXML_Crear(TDAXml,sizeof(TElem)); No lo puedo hacer andar*/
 
-	TDAXml = malloc(sizeof(TDAXML));
 	L_Crear(&(TDAXml->atributos),sizeof(TElem));
 
 	/*Malloc*/
