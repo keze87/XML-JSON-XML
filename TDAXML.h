@@ -27,9 +27,13 @@ int TDAXML_Crear(TDAXML *TDAXml, int tamElemento);
  */
 int xmlCargar(TDAXML *TDAXml, char *rutaXml);
 
-/* PRE: TDAXml correctamente inicializado en memoria
-POST: Guarda el TDAXML en el archivo xml que persistirá en rutaXml. */
-int xmlGuardar(TDAXML *TDAXml, char *rutaXml);
+/* @param  TDAXml estructura que se guardará en un archivo
+ * @param  rutaXml path de destino
+ * @pre    TDAXml creado y cargado
+ * @post   Si se puede grabar la estructura en un archivo, devuelve 0
+ * @post   Si no se puede acceder a la ruta para escritura, devuelve -1
+ */
+int TDAXML_Guardar(TDAXML *TDAXml, char *rutaXml);
 
 /* @param  TDAXml estructura que se destruirá
  * @pre    TDAXml creado
