@@ -4,23 +4,15 @@
 
 #define CANTMAX 255 /*tamaño maximo de linea*/
 
-int TDAXML_Crear(TDAXML *TDAXml, int tamElemento)
-{
-
-	TDAXml = malloc(sizeof(TDAXML));
-
-	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
-		return -1;
-
-	L_Crear(&(TDAXml->atributos),tamElemento);
-
-	return 0;
-
-}
-
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 {
-
+	/* Inicializo el TDAXML */
+	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+		return -1;
+	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
+        	return -2;
+	L_Crear(&(TDAXml->atributos),TAM_ELEM);
+	/* Comienza el proceso de cargado */
 	FILE *archivoxml;
 
 	int error;
