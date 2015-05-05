@@ -181,26 +181,19 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 }
 
-int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
+int TDAXML_Guardar(TDAXML *TDAXml, char *rutaXml);
 {
 
 	FILE *archivoxml;
 	archivoxml = fopen(rutaXml, "w");
-
 	if (archivoxml)
 	{
-
 		printf("SE ABRIO!\n");
-
-
-
 		fclose(archivoxml);
 		printf("GUARDO XML\n");
-
 	}
 	else
-		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
-
+		return -1;
 	return 0;
 
 }
