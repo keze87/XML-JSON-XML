@@ -259,26 +259,26 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 		do {
 			code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
 			L_Elem_Cte(TDAXml->atributos,Aux);
-			if (EsDelimitador(Aux)==0) { /* Es un delimitador */
-				if (strcmp(Aux.Value,DELIM_OPEN)==0) { /* Es apertura */
-					EscribirAtributo_Apertura(Aux.Atributo, arch);
-					fprintf('\n');
+			if (EsDelimitador(*Aux)==0) { /* Es un delimitador */
+				if (strcmp(Aux->Value,DELIM_OPEN)==0) { /* Es apertura */
+					EscribirAtributo_Apertura(Aux->Atributo, arch);
+					fprintf(arch, '\n');
 					EscribirTabs(++nivel,arch);
 				}
 				else { /* Es cierre */
-					EscribirAtributo_Cierre(Aux.Atributo, arch);
-					fprintf('\n');
+					EscribirAtributo_Cierre(Aux->Atributo, arch);
+					fprintf(arch, '\n');
 					EscribirTabs(--nivel,arch);
 				}
 			}
 			else { /* Es un elemento */
-				EscribirAtributo_Apertura(Aux.Atributo, arch);
-				fputs(Aux.Value);
-				EscribirAtributo_Cierre(Aux.Atributo, arch);
-				fprintf('\n');
+				EscribirAtributo_Apertura(Aux->Atributo, arch);
+				fputs(Aux->Value, arch);
+				EscribirAtributo_Cierre(Aux->Atributo, arch);
+				fprintf(arch, '\n');
 				EscribirTabs(nivel,arch);
 			}
-		} while ((code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente)) != 0)
+		} while ((code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente)) != 0);
 	}
 	/* Cierro el tagPrincipal */
 	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
