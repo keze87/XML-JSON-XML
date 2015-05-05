@@ -24,20 +24,20 @@ typedef struct {
  */
 int tElem_Inicializar(tElem* aux)
 {
-	if ((tElem->Atributo = (char*)malloc(CANTMAX+1)) == NULL)
+	if ((aux->Atributo = (char*)malloc(CANTMAX+1)) == NULL)
 		return -1;
-	if ((tElem->Value = (char*)malloc(CANTMAX+1)) == NULL) {
-		free(tElem->Atributo);
+	if ((aux->Value = (char*)malloc(CANTMAX+1)) == NULL) {
+		free(aux->Atributo);
 		return -1;
 	}
-	tElem->Tipo=VACIO;
+	aux->Tipo=VACIO;
 }
 
 /* Libera la memoria utilizada por tElem */
 void tElem_Destruir(tElem* aux)
 {
-	free(tElem->Atributo);
-	free(tElem->Value);
+	free(aux->Atributo);
+	free(aux->Value);
 }
 
 /* Funcion que devuelve 0 si el elemento es un delimitador */
