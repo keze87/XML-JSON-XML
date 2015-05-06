@@ -73,7 +73,13 @@ void EscribirAtributo_Cierre(char* at, FILE* arch)
 
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 {
-
+	/* Inicializo el TDAXML */
+	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+		return -1;
+	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
+		return -2;
+	L_Crear(&(TDAXml->atributos),TAM_ELEM);
+	/* Comienza el proceso de cargado */
 	FILE *archivoxml;
 
 	int error;
@@ -238,7 +244,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 		return -2;
 	}
 	/* Escribo el tagPrincipal */
-	/*EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);*/
+	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
 	fprintf(arch,"\n");
 	EscribirTabs(++nivel, arch);
 	/* Comienzo a recorrer la lista de atributos */
@@ -269,17 +275,11 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	}
 	/* Cierro el tagPrincipal */
 	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
-	/* Libero la memoria utilizada y cierro el archivo */
+	/* Libero la memoria utilizada en Aux y cierro el archivo */
 	tElem_Destruir(Aux);
 	fclose(arch);
-
- 	L_Vaciar(&TDAXml->atributos);
-
-	return 0;
-}
-
-void TDAXML_Destruir(TDAXML *TDAXml)
-{
+	/* Destruyo la estructura TDAXML */
 	free(TDAXml->tagPrincipal);
-	L_Vaciar(&(TDAXml->atributos));
+ 	L_Vaciar(&TDAXml->atributos);
+	return 0;
 }
