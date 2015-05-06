@@ -6,7 +6,8 @@
 
 typedef enum TInterruptor{
 	Abierto = 0,
-	Cerrado = 1
+	Cerrado = 1,
+	Valor = 2
 }TInterruptor;
 
 typedef struct TDAConvertidor{
@@ -14,15 +15,11 @@ typedef struct TDAConvertidor{
 	TDAJSON json;
 }TDAConvertidor;
 
-typedef struct TDelimitador{
-	char *id;
-	TInterruptor estado;
-}TDelimitador;
-
 typedef struct TElem{
 	char *id;
-	char *value;
+	TInterruptor estado;
 }TElem;
+
 
 /* @param  rutaXml   ruta dónde se encuentra el archivo XML
  * @param  rutaJson  ruta dónde se grabará el archivo JSON
@@ -35,7 +32,7 @@ typedef struct TElem{
  */
 int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson);
 
-/* @param  rutaJson  ruta dónde se se encuentra el archivo JSON 
+/* @param  rutaJson  ruta dónde se se encuentra el archivo JSON
  * @param  rutaXml   ruta dónde se grabará el archivo XML
  * @pre    -
  * @post   Si se puede realizar la conversión y guardar el nuevo archivo en la ruta especificada, devuelve 0
