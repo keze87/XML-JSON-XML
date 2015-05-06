@@ -18,8 +18,6 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return error;
 	}
 
-	/*error = Magia*/
-
 	/*error = jsonGuardar(&tc->json, rutaJson);
 
 	if (error != OK)
@@ -28,14 +26,13 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return error;
 	}*/
 
-	error = xmlGuardar(&tc->xml, rutaXml);
+	error = xmlGuardar(&tc->xml, rutaJson);
 
 	if (error != OK)
 	{
 		fprintf(stderr,"%d\n",error);
 		return error;
 	}
-
 
 	return error;
 

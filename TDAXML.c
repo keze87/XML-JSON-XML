@@ -218,8 +218,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	free(Elem);
 	free(Delimitador);
 
-	L_Vaciar(&TDAXml->atributos); /*Esto no tiene que estar acá*/
-
 	if (error == 1)
 		error = 0; /* Lista.h está al verrez */
 
@@ -240,7 +238,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 		return -2;
 	}
 	/* Escribo el tagPrincipal */
-	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
+	/*EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);*/
 	fprintf(arch,"\n");
 	EscribirTabs(++nivel, arch);
 	/* Comienzo a recorrer la lista de atributos */
@@ -274,6 +272,9 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	/* Libero la memoria utilizada y cierro el archivo */
 	tElem_Destruir(Aux);
 	fclose(arch);
+
+ 	L_Vaciar(&TDAXml->atributos);
+
 	return 0;
 }
 
