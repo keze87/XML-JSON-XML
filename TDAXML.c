@@ -74,90 +74,63 @@ void EscribirAtributo_Cierre(char* at, FILE* arch)
 int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 {
 
-	FILE *archivoxml;
-
 	int error;
 	int cont;
 	char letra;
 
+	/*Malloc*/
+	char* palabra = calloc (255,sizeof(char)); /* donde voy guardando las letras */
+
 	TElem* Elem = (TElem*)malloc(sizeof(TElem));
 
-	/*Malloc*/
-	char* id = malloc (255); /* donde voy guardando las letras */
-	char* value = malloc (255);
-	*id = 0;
-	*value = 0;
-	Elem->id = malloc(255);
+	Elem->id = calloc(255,sizeof(char));
 	Elem->estado = (TInterruptor)malloc(sizeof(TInterruptor));
 
 	TDAXml = malloc(sizeof(TDAXML));
 
-	if ((TDAXml->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
+	if ((TDAXml->tagPrincipal = calloc(255,sizeof(char))) == NULL)
 		return -1;
+
 	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
-		return -2;
-
-	L_Crear(&(TDAXml->atributos),sizeof(TElem));
-
-	/*Malloc*/
-
-	archivoxml = fopen(rutaXml, "r");
-
-	if (archivoxml)
-	{
-
-		TDAXml->xmlFile = archivoxml;
-
-	}
-	else
 	{
 
 		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
 
-		return 1;
+		return -2;
 
 	}
+
+	L_Crear(&(TDAXml->atributos),255 + sizeof(TElem));
+	/*Malloc*/
 
 	do
 	{
 
-		letra = fgetc(archivoxml);
+		letra = fgetc(TDAXml->xmlFile);
 
-	}while ((letra != 60) && (letra != EOF));
+	}while ((letra != '<') && (letra != EOF));
 
 	while (letra != EOF)
 	{
 
-		if(L_Vacia((TDAXml->atributos))==FALSE){
-			L_Elem_Cte((TDAXml->atributos), Elem);
-			if (Elem->estado == Valor)
-				printf("EL ELEM ES: %s\n", Elem->id);
-			else
-				printf("EL Delim ES: %s %d\n", Elem->id, Elem->estado);
-		}
-
-
-
-		if (letra == 60) /* < */
+		if (letra == '<')
 		{
 
-			memset(id,0,255);
+			memset(palabra,0,255);
 
-			letra = fgetc(archivoxml);
+			letra = fgetc(TDAXml->xmlFile);
 
 			if (letra == EOF)
 				break;
 
 			cont = 0;
 
-			while (letra != 62) /* > */
+			while (letra != '>')
 			{
 
-				id[cont] = letra;
+				palabra[cont] = letra;
 
-				printf("%c",letra);
-
-				letra = fgetc(archivoxml);
+				letra = fgetc(TDAXml->xmlFile);
 
 				if (letra == EOF)
 					break;
@@ -166,10 +139,11 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			}
 
-			printf("\n");
+			palabra[cont] = '\0';
 
-			strcpy(Elem->id, id);
-			if(id[0] == 47)
+			strcpy(Elem->id, palabra);
+
+			if(palabra[0] == 47) /* \ */
 			{
 				Elem->estado = Cerrado;
 			}
@@ -177,26 +151,27 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 				Elem->estado = Abierto;
 
 			error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Elem);
+
 		}
 
-		if (letra == 62) /* > */
+		if (letra == '>')
 		{
 
-			memset(value,0,255);
+			memset(palabra,0,255);
 
-			letra = fgetc(archivoxml);
+			letra = fgetc(TDAXml->xmlFile);
 
 			if (letra == EOF)
 				break;
 
 			cont = 0;
 
-			while (letra != 60) /* < */
+			while (letra != '<')
 			{
 
-				value[/*strlen(value)*/cont] = letra;
+				palabra[cont] = letra;
 
-				letra = fgetc(archivoxml);
+				letra = fgetc(TDAXml->xmlFile);
 
 				if (letra == EOF)
 					break;
@@ -205,24 +180,41 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			}
 
-			if ((value[0] != 10/* \n */) && (value[0] != 9/* TAB */)){
-				/*printf("value = %s\n",value);*/
+			palabra[cont] = '\0';
 
-				strcpy(Elem->id, value);
+			if ((palabra[0] != '\n') && (palabra[0] != '\t') && (letra == '<'))
+			{
+
+				strcpy(Elem->id, palabra);
 				Elem->estado = Valor;
 
 				error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Elem);
 
 			}
-			else
-				letra = 60;
 
 		}
 
 	}
 
-	free(id);
-	free(value);
+	error = L_Mover_Cte(&TDAXml->atributos,L_Primero);
+
+	while (error == TRUE)
+	{
+
+		L_Elem_Cte(TDAXml->atributos,Elem);
+
+		if (Elem->estado == Valor)
+			printf("Valor = %s\n", Elem->id);
+		if (Elem->estado == Abierto)
+			printf("EL Delim ES: %s (Abierto)\n", Elem->id);
+		if (Elem->estado == Cerrado)
+			printf("EL Delim ES: %s (Cerrado)\n", Elem->id);
+
+		error = L_Mover_Cte(&TDAXml->atributos,L_Siguiente);
+
+	}
+
+	free(palabra);
 	free(Elem);
 
 	if (error == TRUE)
