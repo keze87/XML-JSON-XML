@@ -226,15 +226,12 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 {
-	tElem* Aux = malloc(sizeof(TElem));
+	tElem Aux;
 	FILE *arch = fopen(rutaXml,"w");
 	int code = 0;
 	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
-	if (tElem_Inicializar(Aux) != 0)
+	if (arch == NULL) { /* No se pudo abrir el archivo */
 		return -1;
-	if ((arch = fopen(rutaXml, "w")) == NULL) { /* No se pudo abrir el archivo */
-		free(Aux);
-		return -2;
 	}
 	/* Escribo el tagPrincipal */
 	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
@@ -244,7 +241,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	if (L_Vacia(TDAXml->atributos)!=0) {
 		do {
 			code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
-			L_Elem_Cte(TDAXml->atributos,Aux);
+			L_Elem_Cte(TDAXml->atributos,&Aux);
 			if (EsDelimitador(*Aux)==0) { /* Es un delimitador */
 				if (strcmp(Aux->Value,DELIM_OPEN)==0) { /* Es apertura */
 					EscribirAtributo_Apertura(Aux->Atributo, arch);
@@ -268,8 +265,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	}
 	/* Cierro el tagPrincipal */
 	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
-	/* Libero la memoria utilizada en Aux y cierro el archivo */
-	tElem_Destruir(Aux);
+	/* Cierro el archivo */
 	fclose(arch);
 	/* Destruyo la estructura TDAXML */
 	free(TDAXml->tagPrincipal);
