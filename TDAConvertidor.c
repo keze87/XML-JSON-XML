@@ -24,9 +24,9 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 	{
 		fprintf(stderr,"%d\n",error);
 		return error;
-	}
+	}*/
 
-	error = xmlGuardar(&tc->xml, rutaJson);*/
+	error = xmlGuardar(&tc->xml, rutaJson); /*pa  probar*/
 
 	if (error != OK)
 	{
