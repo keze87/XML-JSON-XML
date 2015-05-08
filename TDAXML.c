@@ -4,15 +4,6 @@
 
 #define CANTMAX 255 /*tamaño maximo de linea*/
 #define TAM_ELEM 200
-#define DELIM_OPEN "ABIERTO"
-#define DELIM_CLOSE "CERRADO"
-
-/* Libera la memoria utilizada por tElem */
-void tElem_Destruir(TElem* aux)
-{
-	free(aux->id);
-	free(&aux->estado);
-}
 
 /* Funcion que escribe una cantidad de tabs en el archivo */
 void EscribirTabs(int cant, FILE* arch)
@@ -20,6 +11,13 @@ void EscribirTabs(int cant, FILE* arch)
 	while (cant-- > 0)
 		fputc('\t', arch);
 }
+
+/* Funcion que devuelve 0 si el elemento es un delimitador */
+int EsDelimitador (TElem aux)
+{
+    return (aux.estado != Valor)?0:-1;
+}
+
 /* Funcion que escribe la apertura de un atributo en un archivo */
 void EscribirAtributo_Apertura(char* at, FILE* arch)
 {
@@ -180,6 +178,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	FILE *arch = fopen(rutaXml,"w");
 	int code = 0;
 	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
+	int NoMueveCorriente = FALSE;
 	if (arch == NULL) { /* No se pudo abrir el archivo */
 		return -1;
 	}
@@ -188,33 +187,41 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	fprintf(arch,"\n");
 	EscribirTabs(++nivel, arch);
 	/* Comienzo a recorrer la lista de atributos */
-
 	if (L_Vacia(TDAXml->atributos)!=0) {
 		do {
+			NoMueveCorriente = FALSE;
 			code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
 			L_Elem_Cte(TDAXml->atributos,&Aux);
 			if (Aux.estado==Abierto){   /* Es apertura */
 				EscribirAtributo_Apertura(Aux.id, arch);
-				fprintf(arch, "\n");
-				EscribirTabs(++nivel,arch);
+				L_Borrar_Cte(TDAXml->atributos);
+				/* El corriente queda en el siguiente, cómo es apertura debe existir */
+				L_Elem_Cte(TDAXml->atributos,&Aux);
+				if (EsDelimitador(Aux)) {
+                    			fprintf(arch, "\n");
+                    			EscribirTabs(++nivel,arch);
+                    			NoMueveCorriente = TRUE;
+                		}
 			}
-			if (Aux.estado==Cerrado){ /* Es cierre */
-				EscribirAtributo_Cierre(Aux.id, arch);
-				fprintf(arch, "\n");
-				EscribirTabs(--nivel,arch);
-			}
-			if (Aux.estado==Valor){ /* Es un elemento */
-				/*EscribirAtributo_Apertura(Aux->Atributo, arch);*/
-				fputs(Aux.id, arch);
-				/*EscribirAtributo_Cierre(Aux->Atributo, arch);*/
-				fprintf(arch, "\n");
-				/*EscribirTabs(nivel,arch);*/
-			}
-		} while ((code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente)) != 0);
+			else {
+                		if (Aux.estado==Cerrado) { /* Es cierre */
+                    			EscribirAtributo_Cierre(Aux.id, arch);
+                    			fprintf(arch, "\n");
+                    			EscribirTabs(--nivel,arch);
+        			 }
+                		if (Aux.estado==Valor) /* Es un elemento */
+                    			fputs(Aux.id, arch);
+                	}
+                	if (NoMueveCorriente == FALSE) /* Debo mover el corriente  */
+                		code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
+		} while (code != 0);
 	}
 	/* Cierro el tagPrincipal */
 	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
 	/* Cierro el archivo */
 	fclose(arch);
+	/* Destruyo la estructura TDAXML */
+	free(TDAXml->tagPrincipal);
+ 	L_Vaciar(&TDAXml->atributos);
 	return 0;
 }
