@@ -7,22 +7,6 @@
 #define DELIM_OPEN "ABIERTO"
 #define DELIM_CLOSE "CERRADO"
 
-/* Inicializa tElem
- * Si no existe suficiente memoria para inicializar la estructura devuelve -1
- */
-int tElem_Inicializar(TElem* aux)
-{
-	if ((aux->id = (char*)malloc(CANTMAX+1)) == NULL)
-		return -1;
-	if ((aux->estado = (TInterruptor)malloc(sizeof(TInterruptor))) == NULL) {
-		free(&aux->estado);
-		return -1;
-	}
-	aux->estado=Abierto;
-
-	return 0;
-}
-
 /* Libera la memoria utilizada por tElem */
 void tElem_Destruir(TElem* aux)
 {
@@ -67,22 +51,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	Elem->id = calloc(255,sizeof(char));
 	Elem->estado = (TInterruptor)malloc(sizeof(TInterruptor));
-
-	TDAXml = malloc(sizeof(TDAXML));
-
-	if ((TDAXml->tagPrincipal = calloc(255,sizeof(char))) == NULL)
-		return -1;
-
-	if ((TDAXml->xmlFile = fopen(rutaXml, "r")) == NULL)
-	{
-
-		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
-
-		return -2;
-
-	}
-
-	L_Crear(&(TDAXml->atributos),255 + sizeof(TElem));
 	/*Malloc*/
 
 	do
@@ -220,20 +188,21 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	fprintf(arch,"\n");
 	EscribirTabs(++nivel, arch);
 	/* Comienzo a recorrer la lista de atributos */
+
 	if (L_Vacia(TDAXml->atributos)!=0) {
 		do {
 			code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
 			L_Elem_Cte(TDAXml->atributos,&Aux);
 			if (Aux.estado==Abierto){   /* Es apertura */
-                EscribirAtributo_Apertura(Aux.id, arch);
-                fprintf(arch, "\n");
-                EscribirTabs(++nivel,arch);
-            }
+				EscribirAtributo_Apertura(Aux.id, arch);
+				fprintf(arch, "\n");
+				EscribirTabs(++nivel,arch);
+			}
 			if (Aux.estado==Cerrado){ /* Es cierre */
-                EscribirAtributo_Cierre(Aux.id, arch);
-                fprintf(arch, "\n");
-                EscribirTabs(--nivel,arch);
-            }
+				EscribirAtributo_Cierre(Aux.id, arch);
+				fprintf(arch, "\n");
+				EscribirTabs(--nivel,arch);
+			}
 			if (Aux.estado==Valor){ /* Es un elemento */
 				/*EscribirAtributo_Apertura(Aux->Atributo, arch);*/
 				fputs(Aux.id, arch);
@@ -247,8 +216,5 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
 	/* Cierro el archivo */
 	fclose(arch);
-	/* Destruyo la estructura TDAXML */
-	free(TDAXml->tagPrincipal);
- 	L_Vaciar(&TDAXml->atributos);
 	return 0;
 }

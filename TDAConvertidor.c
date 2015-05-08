@@ -10,6 +10,24 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 	int error;
 
+	/*Malloc*/
+	tc = malloc(sizeof(TDAXML));
+
+	if ((tc->xml.tagPrincipal = calloc(255,sizeof(char))) == NULL)
+		return -1;
+
+	if ((tc->xml.xmlFile = fopen(rutaXml, "r")) == NULL)
+	{
+
+		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
+
+		return -2;
+
+	}
+
+	L_Crear(&(tc->xml.atributos),255 + sizeof(TElem));
+	/*Malloc*/
+
 	error = xmlCargar(&tc->xml, rutaXml);
 
 	if (error != OK)
@@ -33,6 +51,10 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		fprintf(stderr,"%d\n",error);
 		return error;
 	}
+
+	L_Vaciar(&tc->xml.atributos);
+	free(tc->xml.tagPrincipal);
+	free(tc);
 
 	return error;
 
