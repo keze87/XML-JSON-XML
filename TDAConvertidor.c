@@ -3,30 +3,33 @@
 #include "TDAXML.h"
 
 #define OK 0
-#define NO 1
 
 int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 {
 
 	int error;
 
-	/*Malloc*/
-	tc = malloc(sizeof(TDAXML));
+	/*Esto vuela*/
+	TElem* Elem = malloc(50);
+	Elem->id = malloc(50);
+	/*Esto vuela*/
 
-	if ((tc->xml.tagPrincipal = calloc(255,sizeof(char))) == NULL)
+	/*Malloc*/
+	tc = malloc(sizeof(TDAConvertidor));
+
+	if ((tc->xml.tagPrincipal = malloc(255)) == NULL)
 		return -1;
 
 	if ((tc->xml.xmlFile = fopen(rutaXml, "r")) == NULL)
 	{
-
 		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
-
 		return -2;
-
 	}
 
-	L_Crear(&(tc->xml.atributos),255 + sizeof(TElem));
+	L_Crear(&(tc->xml.atributos),50);
 	/*Malloc*/
+
+printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
 
 	error = xmlCargar(&tc->xml, rutaXml);
 
@@ -36,25 +39,50 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return error;
 	}
 
-	/*error = jsonGuardar(&tc->json, rutaJson);
-
-	if (error != OK)
+	if (L_Vacia(tc->xml.atributos) == FALSE)
 	{
-		fprintf(stderr,"%d\n",error);
-		return error;
-	}*/
 
-	error = xmlGuardar(&tc->xml, rutaJson); /*pa  probar*/
+		/*error = jsonGuardar(&tc->json, rutaJson);*/
 
-	if (error != OK)
-	{
-		fprintf(stderr,"%d\n",error);
-		return error;
+
+		/*Esto tambien vuela*/
+printf("\n\nEsto tengo en la lista:\n\n");
+
+		error = L_Mover_Cte(&tc->xml.atributos,L_Primero);
+
+		while (error == TRUE)
+		{
+
+			L_Elem_Cte(tc->xml.atributos,Elem);
+
+			if (Elem->estado == Valor)
+				printf("Valor = %s\n", Elem->id);
+			if (Elem->estado == Abierto)
+				printf("EL Delim ES: %s (Abierto)\n", Elem->id);
+			if (Elem->estado == Cerrado)
+				printf("EL Delim ES: %s (Cerrado)\n", Elem->id);
+
+			error = L_Mover_Cte(&tc->xml.atributos,L_Siguiente);
+
+		}
+		/*Esto tambien vuela*/
+
+
+		error = xmlGuardar(&tc->xml, rutaJson);
+
+		if (error != OK)
+		{
+			fprintf(stderr,"%d\n",error);
+			return error;
+		}
+
 	}
 
 	L_Vaciar(&tc->xml.atributos);
 	free(tc->xml.tagPrincipal);
 	free(tc);
+	free(Elem->id);
+	free(Elem);
 
 	return error;
 
@@ -89,13 +117,19 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 int CrearTC(TDAConvertidor *tc)
 {
-	tc = (TDAConvertidor*)malloc(sizeof(TDAConvertidor));
+	/*tc = (TDAConvertidor*)malloc(sizeof(TDAConvertidor));
 	if (tc == NULL)
-		return -1;
+		return -1;*/
+
+	printf("\n"); /*No deberia ser así*/
 	return 0;
 }
 
 void DestruirTC(TDAConvertidor *tc)
 {
-	free(tc);
+	/*L_Vaciar(&tc->xml.atributos);
+	free(tc->xml.tagPrincipal);
+	free(tc);*/
+
+	printf("\n"); /*No deberia ser así*/
 }
