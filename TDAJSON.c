@@ -1,35 +1,93 @@
 #include "TDAJSON.h"
 #include "Lista.h"
+#include "TDAConvertidor.h"
 
 #define CANTMAX 255 /*tamaño maximo de linea*/
 #define TAM_ELEM 200
 
 int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 {
-	FILE *archivojson;
-	/* Inicializo el TDAJSON */
-	if ((TDAJson->tagPrincipal = (char*)malloc(CANTMAX+1)) == NULL)
-		return -1;
-	if ((TDAJson->jsonFile = fopen(rutaJson, "r")) == NULL)
-        	return -2;
-	L_Crear(&(TDAJson->atributos),TAM_ELEM);
-	/* Comienza el proceso de cargado */
-	archivojson = fopen(rutaJson, "r");
 
-	if (archivojson)
+	char letra = 0;
+	int cont = 0;
+
+	TElem Elem;
+	Elem.id = malloc(50);
+
+	while ((letra != '"') && (letra != EOF))
 	{
 
-		TDAJson->jsonFile = archivojson;
-		printf("SE ABRIO!\n");
-
-
-
-		fclose(archivojson);
-		printf("CARGO JSON\n");
+		letra = fgetc(TDAJson->jsonFile);
 
 	}
-	else
-		fprintf(stderr,"La ruta %s no es valida\n", rutaJson);
+
+	while (letra != EOF)
+	{
+
+		memset(Elem.id,0,50);
+
+		if (letra == '"')
+		{
+
+			letra = fgetc(TDAJson->jsonFile);
+
+			cont = 0;
+
+			while (letra != '"')
+			{
+
+				Elem.id[cont] = letra;
+
+				letra = fgetc(TDAJson->jsonFile);
+
+				cont++;
+
+			}
+
+			printf("%s\n",Elem.id);
+
+			letra = fgetc(TDAJson->jsonFile);
+
+		}
+		else
+		{
+
+			if (letra == ':')
+			{
+
+				letra = fgetc(TDAJson->jsonFile);
+
+				if (letra == '"')
+				{
+
+					letra = fgetc(TDAJson->jsonFile);
+
+					cont = 0;
+
+					while (letra != '"')
+					{
+
+						Elem.id[cont] = letra;
+
+						letra = fgetc(TDAJson->jsonFile);
+
+						cont++;
+
+					}
+
+				printf("Value = %s\n",Elem.id);
+
+				letra = fgetc(TDAJson->jsonFile);
+
+				}
+			}
+			else
+				letra = fgetc(TDAJson->jsonFile);
+
+		}
+
+	}
+
 
 	return 0;
 

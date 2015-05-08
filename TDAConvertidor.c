@@ -25,7 +25,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return -2;
 	}
 
-	L_Crear(&(tc->xml.atributos),sizeof(TElem));
+	L_Crear(&(tc->xml.atributos),8);
 	/*Malloc*/
 
 printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
@@ -90,6 +90,27 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 	int error;
 
+	/*Esto vuela*/
+	TElem Elem;
+	/*Esto vuela*/
+
+	/*Malloc*/
+	tc = malloc(sizeof(TDAConvertidor));
+
+	if ((tc->json.tagPrincipal = malloc(255)) == NULL)
+		return -1;
+
+	if ((tc->json.jsonFile = fopen(rutaJson, "r")) == NULL)
+	{
+		fprintf(stderr,"La ruta %s no es valida\n", rutaJson);
+		return -2;
+	}
+
+	L_Crear(&(tc->json.atributos),8);
+	/*Malloc*/
+
+printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
+
 	error = jsonCargar(&tc->json, rutaJson);
 
 	if (error != OK)
@@ -98,15 +119,48 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 		return error;
 	}
 
-	/*error = Magia*/
-
-	error = xmlGuardar(&tc->xml, rutaXml);
-
-	if (error != OK)
+	if (L_Vacia(tc->json.atributos) == FALSE)
 	{
-		fprintf(stderr,"%d\n",error);
-		return error;
+
+		/*error = jsonGuardar(&tc->json, rutaJson);*/
+
+
+		/*Esto tambien vuela*/
+printf("\n\nEsto tengo en la lista:\n\n");
+
+		error = L_Mover_Cte(&tc->json.atributos,L_Primero);
+
+		while (error == TRUE)
+		{
+
+			L_Elem_Cte(tc->json.atributos,&Elem);
+
+			if (Elem.estado == Valor)
+				printf("Valor = %s\n", Elem.id);
+			if (Elem.estado == Abierto)
+				printf("EL Delim ES: %s (Abierto)\n", Elem.id);
+			if (Elem.estado == Cerrado)
+				printf("EL Delim ES: %s (Cerrado)\n", Elem.id);
+
+			error = L_Mover_Cte(&tc->json.atributos,L_Siguiente);
+
+		}
+		/*Esto tambien vuela*/
+
+
+		error = jsonGuardar(&tc->json, rutaXml);
+
+		if (error != OK)
+		{
+			fprintf(stderr,"%d\n",error);
+			return error;
+		}
+
 	}
+
+	L_Vaciar(&tc->json.atributos);
+	free(tc->json.tagPrincipal);
+	free(tc);
 
 	return error;
 
