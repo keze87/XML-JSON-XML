@@ -10,8 +10,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 	int error;
 
 	/*Esto vuela*/
-	TElem* Elem = malloc(50);
-	Elem->id = malloc(50);
+	TElem Elem;
 	/*Esto vuela*/
 
 	/*Malloc*/
@@ -26,7 +25,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return -2;
 	}
 
-	L_Crear(&(tc->xml.atributos),50);
+	L_Crear(&(tc->xml.atributos),sizeof(TElem));
 	/*Malloc*/
 
 printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
@@ -53,14 +52,14 @@ printf("\n\nEsto tengo en la lista:\n\n");
 		while (error == TRUE)
 		{
 
-			L_Elem_Cte(tc->xml.atributos,Elem);
+			L_Elem_Cte(tc->xml.atributos,&Elem);
 
-			if (Elem->estado == Valor)
-				printf("Valor = %s\n", Elem->id);
-			if (Elem->estado == Abierto)
-				printf("EL Delim ES: %s (Abierto)\n", Elem->id);
-			if (Elem->estado == Cerrado)
-				printf("EL Delim ES: %s (Cerrado)\n", Elem->id);
+			if (Elem.estado == Valor)
+				printf("Valor = %s\n", Elem.id);
+			if (Elem.estado == Abierto)
+				printf("EL Delim ES: %s (Abierto)\n", Elem.id);
+			if (Elem.estado == Cerrado)
+				printf("EL Delim ES: %s (Cerrado)\n", Elem.id);
 
 			error = L_Mover_Cte(&tc->xml.atributos,L_Siguiente);
 
@@ -81,8 +80,6 @@ printf("\n\nEsto tengo en la lista:\n\n");
 	L_Vaciar(&tc->xml.atributos);
 	free(tc->xml.tagPrincipal);
 	free(tc);
-	free(Elem->id);
-	free(Elem);
 
 	return error;
 

@@ -28,10 +28,8 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	int tag = 0; /* para el tagpcpal */
 
 	/*Malloc*/
-	TElem* Elem = malloc(255);
-
-	Elem->id = malloc(255); /* donde voy guardando las letras */
-	/*Elem->estado = (TInterruptor)malloc(sizeof(TInterruptor));*/
+	TElem Elem;
+	Elem.id = malloc(255); /* donde voy guardando las letras */
 	/*Malloc*/
 
 	do
@@ -44,7 +42,8 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	while (letra != EOF)
 	{
 
-		memset(Elem->id,0,50);
+		free(Elem.id);
+		Elem.id = calloc(50,sizeof(char));
 
 		if (letra == '<')
 		{
@@ -59,7 +58,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			while (letra != '>')
 			{
 
-				Elem->id[cont] = letra;
+				Elem.id[cont] = letra;
 
 				letra = fgetc(TDAXml->xmlFile);
 
@@ -73,22 +72,22 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			if (tag != 0)
 			{
 
-				if(Elem->id[0] == '/')
+				if(Elem.id[0] == '/')
 				{
-					Elem->estado = Cerrado;
+					Elem.estado = Cerrado;
 				}
 				else
-					Elem->estado = Abierto;
+					Elem.estado = Abierto;
 
-				error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Elem);
+				error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,&Elem);
 
-				printf("%s\n",Elem->id);
+				printf("%s\n",Elem.id);
 
 			}
 			else /* Solo la primera vez */
 			{
 
-				strcpy(TDAXml->tagPrincipal,Elem->id);
+				strcpy(TDAXml->tagPrincipal,Elem.id);
 				printf("tagPrincipal = %s\n\n",TDAXml->tagPrincipal);
 				tag = 1;
 
@@ -111,7 +110,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 				while (letra != '<')
 				{
 
-					Elem->id[cont] = letra;
+					Elem.id[cont] = letra;
 
 					letra = fgetc(TDAXml->xmlFile);
 
@@ -122,16 +121,16 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 				}
 
-				Elem->id[cont] = '\0';
+				Elem.id[cont] = '\0';
 
-				if ((Elem->id[0] != '\n') && (Elem->id[0] != '\t') && (letra == '<'))
+				if ((Elem.id[0] != '\n') && (Elem.id[0] != '\t') && (letra == '<'))
 				{
 
-					Elem->estado = Valor;
+					Elem.estado = Valor;
 
-					error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,Elem);
+					error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,&Elem);
 
-					printf("\nvalor = %s\n\n",Elem->id);
+					printf("\nvalor = %s\n\n",Elem.id);
 
 				}
 
@@ -140,9 +139,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 		}
 
 	}
-
-	free(Elem->id);
-	free(Elem);
 
 	if (error == TRUE)
 		error = 0;
