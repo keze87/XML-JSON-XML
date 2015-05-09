@@ -18,7 +18,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 	/*Malloc*/
 	tc = malloc(sizeof(TDAConvertidor));
 
-	if ((tc->xml.tagPrincipal = malloc(255)) == NULL)
+	if ((tc->xml.tagPrincipal = malloc(CANTMAX)) == NULL)
 		return -1;
 
 	if ((tc->xml.xmlFile = fopen(rutaXml, "r")) == NULL)
@@ -104,7 +104,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 	/*Malloc*/
 	tc = malloc(sizeof(TDAConvertidor));
 
-	if ((tc->json.tagPrincipal = malloc(255)) == NULL)
+	if ((tc->json.tagPrincipal = malloc(CANTMAX)) == NULL)
 		return -1;
 
 	if ((tc->json.jsonFile = fopen(rutaJson, "r")) == NULL)
@@ -161,7 +161,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 		/*Esto tambien vuela*/
 
 
-		error = jsonGuardar(&tc->json, rutaXml);
+		/*error = xmlGuardar(&tc->json, rutaXml);*/
 
 		if (error != OK)
 		{

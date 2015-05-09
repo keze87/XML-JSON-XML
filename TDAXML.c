@@ -18,18 +18,9 @@ int EsDelimitador (TElem aux)
 }
 
 /* Funcion que escribe la apertura de un atributo en un archivo */
-void EscribirAtributo_Apertura(char* at, FILE* arch)
+void EscribirAtributo(char* at, FILE* arch)
 {
 	fputc('<', arch);
-	fputs(at, arch);
-	fputc('>', arch);
-}
-
-/* Funcion que escribe el cierre de un atributo en un archivo */
-void EscribirAtributo_Cierre(char* at, FILE* arch)
-{
-	fputc('<', arch);
-	fputc('/', arch);
 	fputs(at, arch);
 	fputc('>', arch);
 }
@@ -164,29 +155,29 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 }
 
 int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
-{
+/*{
 	TElem Aux;
 	FILE *arch = fopen(rutaXml,"w");
 	int code = 0;
-	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
+	int nivel = 0; * Se utiliza para saber cuantos "tabs" imprimir en el archivo *
 	int NoMueveCorriente = FALSE;
-	if (arch == NULL) { /* No se pudo abrir el archivo */
+	if (arch == NULL) { * No se pudo abrir el archivo *
 		return -1;
 	}
-	/* Escribo el tagPrincipal */
+	* Escribo el tagPrincipal *
 	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
 	fprintf(arch,"\n");
 	EscribirTabs(++nivel, arch);
-	/* Comienzo a recorrer la lista de atributos */
+	* Comienzo a recorrer la lista de atributos *
 	if (L_Vacia(TDAXml->atributos)!=0) {
 		do {
 			NoMueveCorriente = FALSE;
 			code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
 			L_Elem_Cte(TDAXml->atributos,&Aux);
-			if (Aux.estado==Abierto){   /* Es apertura */
+			if (Aux.estado==Abierto){   * Es apertura *
 				EscribirAtributo_Apertura(Aux.id, arch);
 				L_Borrar_Cte(&TDAXml->atributos);
-				/* El corriente queda en el siguiente, cómo es apertura debe existir */
+				* El corriente queda en el siguiente, cómo es apertura debe existir *
 				L_Elem_Cte(TDAXml->atributos,&Aux);
 				if (EsDelimitador(Aux)) {
                     			fprintf(arch, "\n");
@@ -195,24 +186,83 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
                 		}
 			}
 			else {
-                		if (Aux.estado==Cerrado) { /* Es cierre */
+                		if (Aux.estado==Cerrado) { * Es cierre *
                     			EscribirAtributo_Cierre(Aux.id, arch);
                     			fprintf(arch, "\n");
                     			EscribirTabs(--nivel,arch);
         			 }
-                		if (Aux.estado==Valor) /* Es un elemento */
+                		if (Aux.estado==Valor) * Es un elemento *
                     			fputs(Aux.id, arch);
                 	}
-                	if (NoMueveCorriente == FALSE) /* Debo mover el corriente  */
+                	if (NoMueveCorriente == FALSE) * Debo mover el corriente  *
                 		code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
 		} while (code != 0);
 	}
-	/* Cierro el tagPrincipal */
+	* Cierro el tagPrincipal *
 	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
-	/* Cierro el archivo */
+	* Cierro el archivo *
 	fclose(arch);
-	/* Destruyo la estructura TDAXML */
+	* Destruyo la estructura TDAXML *
 	free(TDAXml->tagPrincipal);
  	L_Vaciar(&TDAXml->atributos);
 	return 0;
+}*/
+
+{
+
+	TElem Aux;
+	FILE *arch = fopen(rutaXml,"w");
+	int code = 0;
+	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
+
+	if (arch == NULL)
+	{
+		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
+		return -1;
+	}
+
+	/* Escribo el tagPrincipal */
+	EscribirAtributo(TDAXml->tagPrincipal,arch);
+	fprintf(arch,"\n");
+	EscribirTabs(++nivel, arch);
+
+	/* Comienzo a recorrer la lista de atributos */
+	code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
+
+	while (code != FALSE)
+	{
+
+		L_Elem_Cte(TDAXml->atributos,&Aux);
+
+		if (Aux.estado == Valor) /* Es un elemento */
+		{
+			fputs(Aux.id, arch);
+			/*fprintf(arch,"\n");*/
+		}
+		else
+		{
+
+			EscribirAtributo(Aux.id,arch);
+
+			if (Aux.estado == Abierto)
+				/*EscribirTabs(++nivel,arch);*/
+				nivel++;
+			else
+			{
+				fputc('\n', arch);
+				EscribirTabs(--nivel,arch);
+			}
+
+		}
+
+		code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
+
+	}
+
+	/* Cierro el archivo */
+	fclose(arch);
+
+	return 0;
+
 }
+
