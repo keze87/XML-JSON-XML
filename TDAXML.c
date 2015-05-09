@@ -28,8 +28,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	int tag = 0; /* para el tagpcpal */
 
 	/*Malloc*/
-	TElem Elem;
-	Elem.id = malloc(255); /* donde voy guardando las letras */
+	TElem Elem; /* donde voy guardando las letras */
 	/*Malloc*/
 
 	do
@@ -42,8 +41,13 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	while (letra != EOF)
 	{
 
-		free(Elem.id);
-		Elem.id = calloc(50,sizeof(char));
+		cont = 0;
+
+		while (cont != 51)
+		{
+			Elem.id[cont] = 0;
+			cont++;
+		}
 
 		if (letra == '<')
 		{
@@ -81,14 +85,12 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 				error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,&Elem);
 
-				printf("%s\n",Elem.id);
-
 			}
 			else /* Solo la primera vez */
 			{
 
 				strcpy(TDAXml->tagPrincipal,Elem.id);
-				printf("tagPrincipal = %s\n\n",TDAXml->tagPrincipal);
+
 				tag = 1;
 
 			}
@@ -129,8 +131,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 					Elem.estado = Valor;
 
 					error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,&Elem);
-
-					printf("\nvalor = %s\n\n",Elem.id);
 
 				}
 

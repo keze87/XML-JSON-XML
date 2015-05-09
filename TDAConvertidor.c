@@ -8,6 +8,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 {
 
 	int error;
+	int cont;
 
 	/*Esto vuela*/
 	TElem Elem;
@@ -25,10 +26,8 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return -2;
 	}
 
-	L_Crear(&(tc->xml.atributos),8);
+	L_Crear(&(tc->xml.atributos),sizeof(TElem));
 	/*Malloc*/
-
-printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
 
 	error = xmlCargar(&tc->xml, rutaXml);
 
@@ -45,12 +44,20 @@ printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
 
 
 		/*Esto tambien vuela*/
-printf("\n\nEsto tengo en la lista:\n\n");
+		printf("Esto tengo en la lista:\n\n");
 
 		error = L_Mover_Cte(&tc->xml.atributos,L_Primero);
 
 		while (error == TRUE)
 		{
+
+			cont = 0;
+
+			while (cont != 51)
+			{
+				Elem.id[cont] = 0;
+				cont++;
+			}
 
 			L_Elem_Cte(tc->xml.atributos,&Elem);
 
@@ -89,6 +96,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 {
 
 	int error;
+	int cont;
 
 	/*Esto vuela*/
 	TElem Elem;
@@ -106,10 +114,8 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 		return -2;
 	}
 
-	L_Crear(&(tc->json.atributos),8);
+	L_Crear(&(tc->json.atributos),sizeof(TElem));
 	/*Malloc*/
-
-printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
 
 	error = jsonCargar(&tc->json, rutaJson);
 
@@ -126,12 +132,20 @@ printf("Esto quiero subir a la lista:\n\n"); /*Esto tambien*/
 
 
 		/*Esto tambien vuela*/
-printf("\n\nEsto tengo en la lista:\n\n");
+		printf("\n\nEsto tengo en la lista:\n\n");
 
 		error = L_Mover_Cte(&tc->json.atributos,L_Primero);
 
 		while (error == TRUE)
 		{
+
+			cont = 0;
+
+			while (cont != 51)
+			{
+				Elem.id[0] = 0;
+				cont++;
+			}
 
 			L_Elem_Cte(tc->json.atributos,&Elem);
 

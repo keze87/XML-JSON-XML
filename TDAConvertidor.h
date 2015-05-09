@@ -16,7 +16,7 @@ typedef struct TDAConvertidor{
 }TDAConvertidor;
 
 typedef struct TElem{
-	char *id;
+	char id[50];
 	TInterruptor estado;
 }TElem;
 

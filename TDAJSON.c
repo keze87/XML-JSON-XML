@@ -2,17 +2,15 @@
 #include "Lista.h"
 #include "TDAConvertidor.h"
 
-#define CANTMAX 255 /*tamaño maximo de linea*/
-#define TAM_ELEM 200
-
 int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 {
 
 	char letra = 0;
 	int cont = 0;
+	int tag = 0;
 
 	TElem Elem;
-	Elem.id = malloc(50);
+	/*Elem.id = malloc(50);*/
 
 	while ((letra != '"') && (letra != EOF))
 	{
@@ -24,7 +22,13 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	while (letra != EOF)
 	{
 
-		memset(Elem.id,0,50);
+		cont = 0;
+
+		while (cont != 51)
+		{
+			Elem.id[cont] = 0;
+			cont++;
+		}
 
 		if (letra == '"')
 		{
@@ -44,9 +48,24 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 			}
 
-			printf("%s\n",Elem.id);
-
 			letra = fgetc(TDAJson->jsonFile);
+
+			if (tag == 0)
+			{
+
+				strcpy(TDAJson->tagPrincipal,Elem.id);
+
+				tag = 1;
+
+				printf("Tag Pcpal: %s\n",Elem.id);
+
+			}
+			else
+			{
+
+				printf("%s\n",Elem.id);
+
+			}
 
 		}
 		else
@@ -75,9 +94,9 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 					}
 
-				printf("Value = %s\n",Elem.id);
+					printf("Valor = %s\n",Elem.id);
 
-				letra = fgetc(TDAJson->jsonFile);
+					letra = fgetc(TDAJson->jsonFile);
 
 				}
 			}
@@ -87,7 +106,6 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 		}
 
 	}
-
 
 	return 0;
 
