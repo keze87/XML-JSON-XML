@@ -24,13 +24,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	while (letra != EOF)
 	{
 
-		cont = 0;
-
-		while (cont != 51)
-		{
-			Elem.id[cont] = 0;
-			cont++;
-		}
+		Elem.id[0] = 0;
 
 		if (letra == '"')
 		{
@@ -49,6 +43,8 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 				cont++;
 
 			}
+
+			Elem.id[cont] = 0;
 
 			letra = fgetc(TDAJson->jsonFile);
 
@@ -95,6 +91,8 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						cont++;
 
 					}
+
+					Elem.id[cont] = 0;
 
 					printf("Valor = %s\n",Elem.id);
 

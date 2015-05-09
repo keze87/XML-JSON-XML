@@ -14,7 +14,7 @@ void EscribirTabs(int cant, FILE* arch)
 /* Funcion que devuelve 0 si el elemento es un delimitador */
 int EsDelimitador (TElem aux)
 {
-    return (aux.estado != Valor)?0:-1;
+	return (aux.estado != Valor)?0:-1;
 }
 
 /* Funcion que escribe la apertura de un atributo en un archivo */
@@ -48,13 +48,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 	while (letra != EOF)
 	{
 
-		cont = 0;
-
-		while (cont != CANTMAX)
-		{
-			Elem.id[cont] = 0;
-			cont++;
-		}
+		Elem.id[0] = 0;
 
 		if (letra == '<')
 		{
@@ -79,6 +73,8 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 				cont++;
 
 			}
+
+			Elem.id[cont] = 0;
 
 			if (tag != 0)
 			{

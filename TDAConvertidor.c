@@ -85,6 +85,8 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 	}
 
+	L_Vaciar(&tc->xml.atributos);
+	free(tc->xml.tagPrincipal);
 	free(tc);
 
 	return error;
