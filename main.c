@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 
 	if (Code == SUCCESS) {
 		if (argc == 1) /* El usuario no ingresó argumentos, además del nombre del programa */
-			printf("Debe ingresar al menos un argumento seguido del nombre del programa.\n");
+			printf("Debe ingresar al menos un argumento.\n");
 		else
 		{
 			do

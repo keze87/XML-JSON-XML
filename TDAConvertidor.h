@@ -4,6 +4,8 @@
 #include "TDAXML.h"
 #include "TDAJSON.h"
 
+#define CANTMAX 255
+
 typedef enum TInterruptor{
 	Abierto = 0,
 	Cerrado = 1,
@@ -16,7 +18,7 @@ typedef struct TDAConvertidor{
 }TDAConvertidor;
 
 typedef struct TElem{
-	char *id;
+	char id[CANTMAX];
 	TInterruptor estado;
 }TElem;
 
