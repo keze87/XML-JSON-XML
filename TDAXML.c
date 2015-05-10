@@ -151,6 +151,8 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	}
 
+	L_Borrar_Cte(&TDAXml->atributos); /* Elimino el cierre de tagPrincipal */
+
 	if (error == TRUE)
 		error = 0;
 

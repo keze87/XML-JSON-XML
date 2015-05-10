@@ -18,7 +18,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	int primero_multiple = TRUE; /*flag para saber si es la primera vez que se escribe un atributo multiple*/
 	char vector[4][CANTMAX];
 
- 	/*inicializo*/
+	/*inicializo*/
 	vector[0][0] = '\0';
 	vector[1][0] = '\0';
 	vector[2][0] = '\0';
@@ -51,9 +51,9 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 			while(letra != 34) /*mientras no cierre comilla, leo y guardo en Elem.id*/
 			{
-					Elem.id[i] = letra;
-					i++;
-					letra = fgetc(TDAJson->jsonFile);
+				Elem.id[i] = letra;
+				i++;
+				letra = fgetc(TDAJson->jsonFile);
 			}
 
 			Elem.id[i] = '\0';
@@ -73,7 +73,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 				Elem.estado = Abierto;
 				if (Elem.id[0] != '\0')
-                    error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+					error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 			}
 
 			if ((letra == ',') || (letra == '}'))
@@ -84,19 +84,19 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 				Elem.estado = Valor;
 				if (Elem.id[0] != '\0')
-                    error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+					error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				strcpy(Elem.id,vector[tope]);
 				Elem.estado = Cerrado;
 				if (Elem.id[0] != '\0')
-                    error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+					error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				vector[tope][0] = '\0';
 				if (tope > 0)
 					tope--;
 			}
 
-			Elem.id[0] = '\0';	/*limpio la variable*/
+			Elem.id[0] = '\0'; /*limpio la variable*/
 			i = 0;
 
 		}
@@ -107,8 +107,8 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 			strcpy(Elem.id,vector[tope]);
 			Elem.estado = Cerrado;
-            if (Elem.id[0] != '\0')
-                error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+			if (Elem.id[0] != '\0')
+				error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 			vector[tope][0] = '\0';
 			if (tope > 0)
@@ -153,12 +153,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 						Elem.estado = Valor;
 						if (Elem.id[0] != '\0')
-                            error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+							error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						strcpy(Elem.id,vector[tope]);
 						Elem.estado = Cerrado;
 						if (Elem.id[0] != '\0')
-                            error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+							error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						vector[tope][0] = '\0';
 						if (tope > 0)
@@ -168,7 +168,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						strcpy(Elem.id,palabra_ant);
 						Elem.estado = Cerrado;
 						if (Elem.id[0] != '\0')
-                            error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+							error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						primero_multiple = FALSE;
 					}
@@ -181,8 +181,8 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						strcpy(vector[tope], Elem.id);
 
 						Elem.estado = Abierto;
-                        if (Elem.id[0] != '\0')
-                            error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+						if (Elem.id[0] != '\0')
+							error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 					}
 
 					if ((letra == ',') && (letra_ant != '}'))
@@ -192,12 +192,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 						Elem.estado = Valor;
 						if (Elem.id[0] != '\0')
-                            error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+							error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						strcpy(Elem.id,vector[tope]);
 						Elem.estado = Cerrado;
 						if (Elem.id[0] != '\0')
-                            error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+							error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						vector[tope][0] ='\0';
 						if (tope > 0)
@@ -209,13 +209,13 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 				}
 
-				if ((letra == '{') && (primero_multiple == FALSE)){
+				if ((letra == '{') && (primero_multiple == FALSE))
+				{
 					printf("\n%s -ABRE-", palabra_ant);
 					strcpy(Elem.id,palabra_ant);
-                    Elem.estado = Abierto;
-                    if (Elem.id[0] != '\0')
-                        error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
-
+					Elem.estado = Abierto;
+					if (Elem.id[0] != '\0')
+						error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 				}
 
 				letra_ant = letra;
@@ -235,25 +235,14 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	fclose(TDAJson->jsonFile);
 	printf("\n\nCARGO JSON");
 
-    /* BUSCO EL TAG PRINCIPAL Y LO BORRO DE LA LISTA DE ATRIBUTOS */
-    L_Elem_Cte(TDAJson->atributos, &Elem);
-    L_Borrar_Cte(&TDAJson->atributos); /*borro el ultimo, que es el cierre del tag principal*/
+	/* BUSCO EL TAG PRINCIPAL Y LO BORRO DE LA LISTA DE ATRIBUTOS */
+	L_Elem_Cte(TDAJson->atributos, &Elem);
+	L_Borrar_Cte(&TDAJson->atributos); /*borro el ultimo, que es el cierre del tag principal*/
 
-    error=L_Mover_Cte(&TDAJson->atributos, L_Primero);
-    L_Elem_Cte(TDAJson->atributos, &Elem);
-    strcpy(TDAJson->tagPrincipal, Elem.id); /*el primer elemento de la lista será el tag principal*/
-    L_Borrar_Cte(&TDAJson->atributos); /*borro el primero, que es la apertura del tag principal*/
-
-
-
-   /*  printf("RECORRO LA LISTA:\n");
-     error=L_Mover_Cte(&TDAJson->atributos, L_Primero);
-     L_Elem_Cte(TDAJson->atributos, &Elem);
-     printf("%s %d\n", Elem.id, Elem.estado);
-     while(L_Mover_Cte(&TDAJson->atributos, L_Siguiente)){
-        L_Elem_Cte(TDAJson->atributos, &Elem);
-        printf("%s %d.\n", Elem.id, Elem.estado);
-     }*/
+	error = L_Mover_Cte(&TDAJson->atributos, L_Primero);
+	L_Elem_Cte(TDAJson->atributos, &Elem);
+	strcpy(TDAJson->tagPrincipal, Elem.id); /*el primer elemento de la lista será el tag principal*/
+	L_Borrar_Cte(&TDAJson->atributos); /*borro el primero, que es la apertura del tag principal*/
 
 	if (error != 1)
 		return error;

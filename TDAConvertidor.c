@@ -43,7 +43,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 		/*Esto tambien vuela*/
 		printf("Esto tengo en la lista:\n\n");
-
+		printf("TagPcpal: %s\n",tc->xml.tagPrincipal);
 		error = L_Mover_Cte(&tc->xml.atributos,L_Primero);
 
 		while (error == TRUE)
@@ -128,7 +128,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 		/*Esto tambien vuela*/
 		printf("\n\nEsto tengo en la lista:\n\n");
-
+		printf("TagPcpal: %s\n",tc->json.tagPrincipal);
 		error = L_Mover_Cte(&tc->json.atributos,L_Primero);
 
 		while (error == TRUE)
