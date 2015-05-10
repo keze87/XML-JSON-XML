@@ -34,6 +34,6 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml);
  * @pre    TDAXml creado
  * @post   Se destruye la estructura
  */
-int xmlDestruir(TDAXML *TDAXml);
+void xmlDestruir(TDAXML *TDAXml);
 
 #endif /* __TDAXML_H__ */
