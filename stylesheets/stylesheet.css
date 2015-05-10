@@ -374,18 +374,18 @@ Full-Width Styles
 Small Device Styles
 *******************************************************************************/
 
-@media screen and (max-width: 1000px) {
-  body {
+@media screen and (max-width: 700px) {
+  /*body {
     font-size:14px;
   }
 
   #downloads {
     display: none;
-  }
+  }*/
 
   .inner {
-    min-width: 320px;
-    max-width: 480px;
+    /*min-width: 320px;*/
+    max-width: 90%;/*480px;*/
   }
 
   #project_title {
