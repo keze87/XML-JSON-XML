@@ -3,6 +3,7 @@
 
 #include "Lista.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct TDAXML {
 	char *tagPrincipal;
@@ -28,5 +29,11 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml);
  * @post   Si no se puede acceder a la ruta para escritura, devuelve -1
  */
 int xmlGuardar(TDAXML *TDAXml, char *rutaXml);
+
+/* @param  TDAXml estructura que se destruirá
+ * @pre    TDAXml creado
+ * @post   Se destruye la estructura
+ */
+int xmlDestruir(TDAXML *TDAXml);
 
 #endif /* __TDAXML_H__ */
