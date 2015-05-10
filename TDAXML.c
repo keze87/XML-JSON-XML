@@ -69,6 +69,14 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			cont = 0;
 
+			if(letra == '/')
+			{
+				Elem.estado = Cerrado;
+				letra = fgetc(TDAXml->xmlFile);
+			}
+			else
+				Elem.estado = Abierto;
+
 			while (letra != '>')
 			{
 
@@ -85,13 +93,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			if (tag != 0)
 			{
-
-				if(Elem.id[0] == '/')
-				{
-					Elem.estado = Cerrado;
-				}
-				else
-					Elem.estado = Abierto;
 
 				error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,&Elem);
 
