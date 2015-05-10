@@ -25,7 +25,6 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	vector[3][0] = '\0';
 
 	Elem.id[0] = 0; /* palabra */
-	/*TDAJson->tagPrincipal="HOLA";*/
 
 	if (!TDAJson->jsonFile)
 	{
@@ -73,7 +72,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 				strcpy(vector[tope], Elem.id);
 
 				Elem.estado = Abierto;
-				if (strcmp(&Elem.id, "")!=0)
+				if (Elem.id[0] != '\0')
                     error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 			}
 
@@ -84,12 +83,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 				printf("\n%s -CIERRA-", vector[tope]);
 
 				Elem.estado = Valor;
-				if (strcmp(&Elem.id, "")!=0)
+				if (Elem.id[0] != '\0')
                     error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				strcpy(Elem.id,vector[tope]);
 				Elem.estado = Cerrado;
-				if (strcmp(&Elem.id, "")!=0)
+				if (Elem.id[0] != '\0')
                     error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				vector[tope][0] = '\0';
@@ -108,7 +107,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 			strcpy(Elem.id,vector[tope]);
 			Elem.estado = Cerrado;
-            if (strcmp(&Elem.id, "")!=0)
+            if (Elem.id[0] != '\0')
                 error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 			vector[tope][0] = '\0';
@@ -153,12 +152,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						printf("\n%s -CIERRA-", vector[tope]);
 
 						Elem.estado = Valor;
-						if (strcmp(&Elem.id, "")!=0)
+						if (Elem.id[0] != '\0')
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						strcpy(Elem.id,vector[tope]);
 						Elem.estado = Cerrado;
-						if (strcmp(&Elem.id, "")!=0)
+						if (Elem.id[0] != '\0')
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						vector[tope][0] = '\0';
@@ -168,7 +167,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						printf("\n%s -CIERRA-", palabra_ant);
 						strcpy(Elem.id,palabra_ant);
 						Elem.estado = Cerrado;
-						if (strcmp(&Elem.id, "")!=0)
+						if (Elem.id[0] != '\0')
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						primero_multiple = FALSE;
@@ -182,7 +181,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						strcpy(vector[tope], Elem.id);
 
 						Elem.estado = Abierto;
-                        if (strcmp(&Elem.id, "")!=0)
+                        if (Elem.id[0] != '\0')
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 					}
 
@@ -192,12 +191,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						printf("\n%s -CIERRA-", vector[tope]);
 
 						Elem.estado = Valor;
-						if (strcmp(&Elem.id, "")!=0)
+						if (Elem.id[0] != '\0')
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						strcpy(Elem.id,vector[tope]);
 						Elem.estado = Cerrado;
-						if (strcmp(&Elem.id, "")!=0)
+						if (Elem.id[0] != '\0')
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						vector[tope][0] ='\0';
@@ -214,7 +213,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 					printf("\n%s -ABRE-", palabra_ant);
 					strcpy(Elem.id,palabra_ant);
                     Elem.estado = Abierto;
-                    if (strcmp(&Elem.id, "")!=0)
+                    if (Elem.id[0] != '\0')
                         error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				}
