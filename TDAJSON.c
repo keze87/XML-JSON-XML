@@ -25,6 +25,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	vector[3][0] = '\0';
 
 	Elem.id[0] = 0; /* palabra */
+	/*TDAJson->tagPrincipal="HOLA";*/
 
 	if (!TDAJson->jsonFile)
 	{
@@ -72,7 +73,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 				strcpy(vector[tope], Elem.id);
 
 				Elem.estado = Abierto;
-				if (Elem.id != '\0')
+				if (strcmp(&Elem.id, "")!=0)
                     error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 			}
 
@@ -83,12 +84,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 				printf("\n%s -CIERRA-", vector[tope]);
 
 				Elem.estado = Valor;
-				if (Elem.id != '\0')
+				if (strcmp(&Elem.id, "")!=0)
                     error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				strcpy(Elem.id,vector[tope]);
 				Elem.estado = Cerrado;
-				if (Elem.id != '\0')
+				if (strcmp(&Elem.id, "")!=0)
                     error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				vector[tope][0] = '\0';
@@ -103,11 +104,11 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 		if (letra == '}')
 		{
-			printf("\n%s -CIERRA-", vector[tope]);
+			printf("\n%s -CIERRA--", vector[tope]);
 
 			strcpy(Elem.id,vector[tope]);
 			Elem.estado = Cerrado;
-			if (Elem.id != '\0')
+            if (strcmp(&Elem.id, "")!=0)
                 error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 			vector[tope][0] = '\0';
@@ -152,12 +153,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						printf("\n%s -CIERRA-", vector[tope]);
 
 						Elem.estado = Valor;
-						if (Elem.id != '\0')
+						if (strcmp(&Elem.id, "")!=0)
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						strcpy(Elem.id,vector[tope]);
 						Elem.estado = Cerrado;
-						if (Elem.id != '\0')
+						if (strcmp(&Elem.id, "")!=0)
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						vector[tope][0] = '\0';
@@ -167,7 +168,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						printf("\n%s -CIERRA-", palabra_ant);
 						strcpy(Elem.id,palabra_ant);
 						Elem.estado = Cerrado;
-						if (Elem.id != '\0')
+						if (strcmp(&Elem.id, "")!=0)
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						primero_multiple = FALSE;
@@ -181,7 +182,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						strcpy(vector[tope], Elem.id);
 
 						Elem.estado = Abierto;
-                        if (Elem.id != '\0')
+                        if (strcmp(&Elem.id, "")!=0)
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 					}
 
@@ -191,12 +192,12 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 						printf("\n%s -CIERRA-", vector[tope]);
 
 						Elem.estado = Valor;
-						if (Elem.id != '\0')
+						if (strcmp(&Elem.id, "")!=0)
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						strcpy(Elem.id,vector[tope]);
 						Elem.estado = Cerrado;
-						if (Elem.id != '\0')
+						if (strcmp(&Elem.id, "")!=0)
                             error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 						vector[tope][0] ='\0';
@@ -213,7 +214,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 					printf("\n%s -ABRE-", palabra_ant);
 					strcpy(Elem.id,palabra_ant);
                     Elem.estado = Abierto;
-                    if (Elem.id != '\0')
+                    if (strcmp(&Elem.id, "")!=0)
                         error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
 				}
@@ -234,6 +235,26 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 	fclose(TDAJson->jsonFile);
 	printf("\n\nCARGO JSON");
+
+    /* BUSCO EL TAG PRINCIPAL Y LO BORRO DE LA LISTA DE ATRIBUTOS */
+    L_Elem_Cte(TDAJson->atributos, &Elem);
+    L_Borrar_Cte(&TDAJson->atributos); /*borro el ultimo, que es el cierre del tag principal*/
+
+    error=L_Mover_Cte(&TDAJson->atributos, L_Primero);
+    L_Elem_Cte(TDAJson->atributos, &Elem);
+    strcpy(TDAJson->tagPrincipal, Elem.id); /*el primer elemento de la lista será el tag principal*/
+    L_Borrar_Cte(&TDAJson->atributos); /*borro el primero, que es la apertura del tag principal*/
+
+
+
+   /*  printf("RECORRO LA LISTA:\n");
+     error=L_Mover_Cte(&TDAJson->atributos, L_Primero);
+     L_Elem_Cte(TDAJson->atributos, &Elem);
+     printf("%s %d\n", Elem.id, Elem.estado);
+     while(L_Mover_Cte(&TDAJson->atributos, L_Siguiente)){
+        L_Elem_Cte(TDAJson->atributos, &Elem);
+        printf("%s %d.\n", Elem.id, Elem.estado);
+     }*/
 
 	if (error != 1)
 		return error;
