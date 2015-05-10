@@ -41,9 +41,6 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 	if (L_Vacia(tc->xml.atributos) == FALSE)
 	{
 
-		/*error = jsonGuardar(&tc->json, rutaJson);*/
-
-
 		/*Esto tambien vuela*/
 		printf("Esto tengo en la lista:\n\n");
 
@@ -75,7 +72,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		/*Esto tambien vuela*/
 
 
-		error = xmlGuardar(&tc->xml, rutaJson);
+		error = jsonGuardar(&tc->json, rutaJson);
 
 		if (error != OK)
 		{
@@ -128,9 +125,6 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 	if (L_Vacia(tc->json.atributos) == FALSE)
 	{
-
-		/*error = jsonGuardar(&tc->json, rutaJson);*/
-
 
 		/*Esto tambien vuela*/
 		printf("\n\nEsto tengo en la lista:\n\n");

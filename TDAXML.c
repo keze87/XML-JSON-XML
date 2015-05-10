@@ -157,7 +157,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 }
 
-int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
+int xmlGuardar(TDAJSON *TDAXml, char *rutaXml)
 {
 	TElem Aux;
 	FILE *arch = fopen(rutaXml,"w");
@@ -175,47 +175,47 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 		code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
 		do {
 			if (LeerElemento == TRUE)
-                L_Elem_Cte(TDAXml->atributos,&Aux);
+				L_Elem_Cte(TDAXml->atributos,&Aux);
 			else
-                LeerElemento = TRUE;
+				LeerElemento = TRUE;
 			switch(Aux.estado)
 			{
-                case(Abierto): /* Es apertura */
-                {
-                    EscribirAtributo_Apertura(Aux.id, arch);
-                    code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
-                    /* El corriente queda en el siguiente, cómo es apertura debe existir */
-                    L_Elem_Cte(TDAXml->atributos,&Aux);
-                    LeerElemento = FALSE;
-                    if (Aux.estado == Abierto) {
-                        fputc('\n', arch);
-                        EscribirTabs_XML(++nivel,arch);
-                    }
-                    break;
-                }
-                case(Cerrado): /* Es cierre */
-                {
-                    EscribirAtributo_Cierre(Aux.id, arch);
-                    fputc('\n', arch);
-                    code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
-                    if (code != 0) {
-                        L_Elem_Cte(TDAXml->atributos,&Aux);
-                        LeerElemento = FALSE;
-                        if (Aux.estado == Cerrado)
-                            EscribirTabs_XML(--nivel,arch);
-                        else /* Es Apertura */
-                            EscribirTabs_XML(nivel,arch);
-                    }
-                    break;
-                }
-                case(Valor):
-                {
-                    fputs(Aux.id, arch);
-                    code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
-                    break;
-                }
-                default:
-                    break;
+				case(Abierto): /* Es apertura */
+				{
+					EscribirAtributo_Apertura(Aux.id, arch);
+					code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
+					/* El corriente queda en el siguiente, cómo es apertura debe existir */
+					L_Elem_Cte(TDAXml->atributos,&Aux);
+					LeerElemento = FALSE;
+					if (Aux.estado == Abierto) {
+						fputc('\n', arch);
+						EscribirTabs_XML(++nivel,arch);
+					}
+					break;
+				}
+				case(Cerrado): /* Es cierre */
+				{
+					EscribirAtributo_Cierre(Aux.id, arch);
+					fputc('\n', arch);
+					code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
+					if (code != 0) {
+						L_Elem_Cte(TDAXml->atributos,&Aux);
+						LeerElemento = FALSE;
+						if (Aux.estado == Cerrado)
+							EscribirTabs_XML(--nivel,arch);
+						else /* Es Apertura */
+							EscribirTabs_XML(nivel,arch);
+					}
+					break;
+				}
+				case(Valor):
+				{
+					fputs(Aux.id, arch);
+					code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
+					break;
+				}
+				default:
+					break;
 			}
 		} while (code != 0);
 	}
