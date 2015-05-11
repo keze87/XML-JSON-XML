@@ -1,6 +1,6 @@
 ## Info
 
-http://keze87.github.io/XML-JSON-XML
+[bit.ly/XML2JSON](http://bit.ly/XML2JSON)
 
 ## Licencia
 
