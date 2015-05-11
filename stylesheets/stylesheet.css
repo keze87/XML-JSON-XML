@@ -417,8 +417,8 @@ Small Device Styles
   }
 
   code, pre {
-    min-width: 320px;
-    max-width: 480px;
+    /*min-width: 320px;*/
+    max-width: 90%;/*480px;*/
     font-size: 11px;
   }
 
