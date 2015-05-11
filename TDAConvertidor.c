@@ -72,7 +72,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		/*Esto tambien vuela*/
 
 
-		error = jsonGuardar(&tc->json, rutaJson);
+		error = jsonGuardar(&tc->xml, rutaJson);
 
 		if (error != OK)
 		{
