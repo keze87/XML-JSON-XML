@@ -2,8 +2,6 @@
 #include "Lista.h"
 #include "TDAConvertidor.h"
 
-#define TAM_ELEM 200
-
 /* Funcion que escribe una cantidad de tabs en el archivo */
 void EscribirTabs_XML(int cant, FILE* arch)
 {
@@ -37,29 +35,21 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	int tag = 0; /* para el tagpcpal */
 
-	/*Malloc*/
 	TElem Elem; /* donde voy guardando las letras */
-	/*Malloc*/
 
 	do
 	{
 
 		letra = fgetc(TDAXml->xmlFile);
 
-	}while ((letra != '<') && (letra != EOF));
+	}while ((letra != '<') && (letra != EOF)); /* Leo hasta que encuentro < o el fin del archivo */
 
 	while (letra != EOF)
 	{
 
-		cont = 0;
+		Elem.id[0] = '\0';
 
-		while (cont != CANTMAX)
-		{
-			Elem.id[cont] = 0;
-			cont++;
-		}
-
-		if (letra == '<')
+		if (letra == '<') /* si encuentro < tengo un id */
 		{
 
 			letra = fgetc(TDAXml->xmlFile);
@@ -69,7 +59,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			cont = 0;
 
-			if(letra == '/')
+			if (letra == '/') /* si empieza con / significa que está siendo cerrado */
 			{
 				Elem.estado = Cerrado;
 				letra = fgetc(TDAXml->xmlFile);
@@ -77,7 +67,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			else
 				Elem.estado = Abierto;
 
-			while (letra != '>')
+			while (letra != '>') /* Leo y voy guardando hasta que encuentre > */
 			{
 
 				Elem.id[cont] = letra;
@@ -91,16 +81,18 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 			}
 
+			Elem.id[cont] = '\0';
+
 			if (tag != 0)
 			{
 
-				error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,&Elem);
+				error = L_Insertar_Cte(&TDAXml->atributos,L_Siguiente,&Elem); /* Guardo en Lista */
 
 			}
 			else /* Solo la primera vez */
 			{
 
-				strcpy(TDAXml->tagPrincipal,Elem.id);
+				strcpy(TDAXml->tagPrincipal,Elem.id); /* Guardo en tagPrincipal */
 
 				tag = 1;
 
@@ -110,7 +102,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 		else
 		{
 
-			if (letra == '>')
+			if (letra == '>') /* Si tengo > puede empezar un valor */
 			{
 
 				letra = fgetc(TDAXml->xmlFile);
@@ -120,7 +112,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 				cont = 0;
 
-				while (letra != '<')
+				while (letra != '<') /* Leo y voy guardando hasta que encuentre < */
 				{
 
 					Elem.id[cont] = letra;
@@ -162,48 +154,67 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 {
+
 	TElem Aux;
 	FILE *arch = fopen(rutaXml,"w");
+
 	int code = 0;
 	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
 	int LeerElemento = TRUE;
+
 	if (arch == NULL) /* No se pudo abrir el archivo */
 		return -1;
+
 	/* Escribo el tagPrincipal */
 	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
 	fputc('\n', arch);
 	EscribirTabs_XML(++nivel, arch);
+
 	/* Comienzo a recorrer la lista de atributos */
-	if (L_Vacia(TDAXml->atributos)==0) {
+	if (L_Vacia(TDAXml->atributos) == 0)
+	{
+
 		code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
-		do {
+		do
+		{
+
 			if (LeerElemento == TRUE)
 				L_Elem_Cte(TDAXml->atributos,&Aux);
 			else
 				LeerElemento = TRUE;
+
 			switch(Aux.estado)
 			{
 				case(Abierto): /* Es apertura */
 				{
 					EscribirAtributo_Apertura(Aux.id, arch);
+
 					code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
+
 					/* El corriente queda en el siguiente, cómo es apertura debe existir */
 					L_Elem_Cte(TDAXml->atributos,&Aux);
 					LeerElemento = FALSE;
-					if (Aux.estado == Abierto) {
+
+					if (Aux.estado == Abierto)
+					{
 						fputc('\n', arch);
 						EscribirTabs_XML(++nivel,arch);
 					}
+
 					break;
 				}
 				case(Cerrado): /* Es cierre */
 				{
 					EscribirAtributo_Cierre(Aux.id, arch);
 					fputc('\n', arch);
+
 					code = L_Mover_Cte(&(TDAXml->atributos),L_Siguiente);
-					if (code != 0) {
+
+					if (code != 0)
+					{
 						L_Elem_Cte(TDAXml->atributos,&Aux);
 						LeerElemento = FALSE;
+
 						if (Aux.estado == Cerrado)
 							EscribirTabs_XML(--nivel,arch);
 						else /* Es Apertura */
@@ -222,15 +233,13 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 			}
 		} while (code != 0);
 	}
+
 	/* Cierro el tagPrincipal */
 	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
+
 	/* Cierro el archivo */
 	fclose(arch);
-	return 0;
-}
 
-void xmlDestruir(TDAXML* TDAXml)
-{
-	free(TDAXml->tagPrincipal);
-	L_Vaciar(&(TDAXml->atributos));
+	return 0;
+
 }

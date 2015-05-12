@@ -9,11 +9,6 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 {
 
 	int error;
-	int cont;
-
-	/*Esto vuela*/
-	TElem Elem;
-	/*Esto vuela*/
 
 	/*Malloc*/
 	tc = malloc(sizeof(TDAConvertidor));
@@ -38,54 +33,19 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return error;
 	}
 
-	if (L_Vacia(tc->xml.atributos) == FALSE)
+	/*paso el xml al json*/
+	tc->json.atributos = tc->xml.atributos;
+	tc->json.tagPrincipal = tc->xml.tagPrincipal;
+
+	error = jsonGuardar(&tc->json, rutaJson);
+
+	if (error != OK)
 	{
-
-		/*Esto tambien vuela*/
-		printf("Esto tengo en la lista:\n\n");
-		printf("TagPcpal: %s\n",tc->xml.tagPrincipal);
-		error = L_Mover_Cte(&tc->xml.atributos,L_Primero);
-
-		while (error == TRUE)
-		{
-
-			cont = 0;
-
-			while (cont != CANTMAX)
-			{
-				Elem.id[cont] = 0;
-				cont++;
-			}
-
-			L_Elem_Cte(tc->xml.atributos,&Elem);
-
-			if (Elem.estado == Valor)
-				printf("Valor = %s\n", Elem.id);
-			if (Elem.estado == Abierto)
-				printf("EL Delim ES: %s (Abierto)\n", Elem.id);
-			if (Elem.estado == Cerrado)
-				printf("EL Delim ES: %s (Cerrado)\n", Elem.id);
-
-			error = L_Mover_Cte(&tc->xml.atributos,L_Siguiente);
-
-		}
-		/*Esto tambien vuela*/
-
-		/*paso el xml al json*/
-	        tc->json.atributos=tc->xml.atributos;
-	        tc->json.tagPrincipal= tc->xml.tagPrincipal;
-	        
-		error = jsonGuardar(&tc->json, rutaJson);
-
-		if (error != OK)
-		{
-			fprintf(stderr,"%d\n",error);
-			return error;
-		}
-
+		fprintf(stderr,"%d\n",error);
+		return error;
 	}
 
-	L_Vaciar(&tc->xml.atributos);
+	/*L_Vaciar(&tc->xml.atributos);*/
 	free(tc->xml.tagPrincipal);
 	free(tc);
 
@@ -97,11 +57,6 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 {
 
 	int error;
-	int cont;
-
-	/*Esto vuela*/
-	TElem Elem;
-	/*Esto vuela*/
 
 	/*Malloc*/
 	tc = malloc(sizeof(TDAConvertidor));
@@ -126,51 +81,16 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 		return error;
 	}
 
-	if (L_Vacia(tc->json.atributos) == FALSE)
+	/*paso el json al xml*/
+	tc->xml.atributos = tc->json.atributos;
+	tc->xml.tagPrincipal = tc->json.tagPrincipal;
+
+	error = xmlGuardar(&tc->xml, rutaXml);
+
+	if (error != OK)
 	{
-
-		/*Esto tambien vuela*/
-		printf("\n\nEsto tengo en la lista:\n\n");
-		printf("TagPcpal: %s\n",tc->json.tagPrincipal);
-		error = L_Mover_Cte(&tc->json.atributos,L_Primero);
-
-		while (error == TRUE)
-		{
-
-			cont = 0;
-
-			while (cont != CANTMAX)
-			{
-				Elem.id[cont] = 0;
-				cont++;
-			}
-
-			L_Elem_Cte(tc->json.atributos,&Elem);
-
-			if (Elem.estado == Valor)
-				printf("Valor = %s\n", Elem.id);
-			if (Elem.estado == Abierto)
-				printf("EL Delim ES: %s (Abierto)\n", Elem.id);
-			if (Elem.estado == Cerrado)
-				printf("EL Delim ES: %s (Cerrado)\n", Elem.id);
-
-			error = L_Mover_Cte(&tc->json.atributos,L_Siguiente);
-
-		}
-		/*Esto tambien vuela*/
-
-		/*paso el json al xml*/
-	        tc->xml.atributos=tc->json.atributos;
-	        tc->xml.tagPrincipal= tc->json.tagPrincipal;
-        
-		error = xmlGuardar(&tc->xml, rutaXml);
-
-		if (error != OK)
-		{
-			fprintf(stderr,"%d\n",error);
-			return error;
-		}
-
+		fprintf(stderr,"%d\n",error);
+		return error;
 	}
 
 	L_Vaciar(&tc->json.atributos);

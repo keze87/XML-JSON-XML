@@ -66,65 +66,54 @@ void MostrarMensajeError(tError Code)
 	}
 }
 
-/* Funcion que se encarga de inicializar una cadena de caracteres char*
- * @param  s   cadena de caracteres a inicializar
- * @pos devuelve MEM - error de memoria - si no puede asignar memoria
- * devuelve SUCCESS e inicializa la cadena si puede asignar memoria
- */
-tError InicializarString(char* s)
-{
-	s = (char*)malloc(MAX_LONG_RUTA);
-
-	if (s == NULL) /* No pude asignar memoria */
-		return MEM;
-
-	memset(s,C_NULO,1); /* Inicializo la cadena */
-
-	return SUCCESS;
-}
-
 int main(int argc, char *argv[])
 {
 	TDAConvertidor* TC = NULL;
 	tOperacion Ope = VACIO;
 	tError Code = SUCCESS;
-	char* RutaOrigen = 0;
-	char* RutaDestino = 0;
+	char* RutaOrigen;
+	char* RutaDestino;
 	int i = 1;
 
-	if (CrearTC(TC)!=0)
+	if (CrearTC(TC) != 0)
 		Code = MEM;
 
-	/*Code = InicializarString(RutaOrigen);
-	Code = InicializarString(RutaDestino);*/
+	RutaOrigen = malloc(MAX_LONG_RUTA);
+	RutaDestino = malloc(MAX_LONG_RUTA);
 
-	RutaOrigen = malloc(255);
-	RutaDestino = malloc(255);
+	if ((RutaOrigen == NULL) || (RutaDestino == NULL))
+		return MEM;
 
-	if (Code == SUCCESS) {
+	if (Code == SUCCESS)
+	{
+
 		if (argc == 1) /* El usuario no ingresó argumentos, además del nombre del programa */
 			printf("Debe ingresar al menos un argumento.\n");
 		else
 		{
 			do
 			{
+
 				Ope = VACIO;
 				Inicializar(argv[i],&Ope);
+
 				if (Ope != ERROR)
 				{
-					if (i!=(argc-1))
-					{ /* No es el último argumento --> puedo obtener la ruta de origen */
+					if (i != (argc-1)) /* No es el último argumento --> puedo obtener la ruta de origen */
+					{
 						memcpy(RutaOrigen,argv[++i],MAX_LONG_RUTA);
-						if (i!=(argc-1))
-						{ /* No es el último argumento --> puedo obtener la ruta de destino */
+
+						if (i != (argc-1)) /* No es el último argumento --> puedo obtener la ruta de destino */
 							memcpy(RutaDestino,argv[++i],MAX_LONG_RUTA);
-						}
+
 						else /* Es el último argumento y no tengo la ruta de destino */
 							Code = DEST;
 					}
 					else /* Es el último argumento y no tengo la ruta de origen */
 						Code = ORIG;
-					if (Code == SUCCESS) {
+
+					if (Code == SUCCESS)
+					{
 						switch (Ope)
 						{
 							case (XML2JSON):
@@ -141,9 +130,8 @@ int main(int argc, char *argv[])
 						}
 					}
 				}
-			} while ((++i < argc) && (Code==SUCCESS));
+			} while ((++i < argc) && (Code == SUCCESS));
 		}
-		DestruirTC(TC);
 	}
 
 	if (Ope == ERROR)
@@ -154,6 +142,7 @@ int main(int argc, char *argv[])
 
 	free(RutaOrigen);
 	free(RutaDestino);
+	DestruirTC(TC);
 
 	return EXIT_SUCCESS;
 
