@@ -1,5 +1,6 @@
 {"menu":{
 	"id":"file",
+	"color": 100,
 	"value":"File",
 	"popup":{
 		"menuitem":[{"value":"New","onclick":"CreateNewDoc()"},
