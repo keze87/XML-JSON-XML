@@ -2,7 +2,6 @@
 #define __TDAXML_H__
 
 #include "Lista.h"
-#include "TDAJSON.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,7 +28,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml);
  * @post   Si se puede grabar la estructura en un archivo, devuelve 0 y se destruye la estructura
  * @post   Si no se puede acceder a la ruta para escritura, devuelve -1
  */
-int xmlGuardar(TDAJSON *TDAXml, char *rutaXml);
+int xmlGuardar(TDAXML *TDAXml, char *rutaXml);
 
 /* @param  TDAXml estructura que se destruirá
  * @pre    TDAXml creado

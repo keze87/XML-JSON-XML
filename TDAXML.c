@@ -160,7 +160,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 }
 
-int xmlGuardar(TDAJSON *TDAXml, char *rutaXml)
+int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 {
 	TElem Aux;
 	FILE *arch = fopen(rutaXml,"w");
