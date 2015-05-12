@@ -71,8 +71,11 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		}
 		/*Esto tambien vuela*/
 
-
-		error = jsonGuardar(&tc->xml, rutaJson);
+		/*paso el xml al json*/
+	        tc->json.atributos=tc->xml.atributos;
+	        tc->json.tagPrincipal= tc->xml.tagPrincipal;
+	        
+		error = jsonGuardar(&tc->json, rutaJson);
 
 		if (error != OK)
 		{
@@ -156,8 +159,11 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 		}
 		/*Esto tambien vuela*/
 
-
-		error = xmlGuardar(&tc->json, rutaXml);
+		/*paso el json al xml*/
+	        tc->xml.atributos=tc->json.atributos;
+	        tc->xml.tagPrincipal= tc->json.tagPrincipal;
+        
+		error = xmlGuardar(&tc->xml, rutaXml);
 
 		if (error != OK)
 		{
