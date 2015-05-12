@@ -106,19 +106,43 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	{
 
 		/*SI ESTA ENTRE COMILLAS*/
-		if (letra == 34) /*COMILLA*/ /*recorro hasta que cierre la comilla*/
+		if ((letra == 34)||(letra>=48 && letra<=57)) /*COMILLA o NUMERO*/ /*recorro hasta que cierre la comilla*/
 		{
+            if (letra==34){
+                letra = fgetc(TDAJson->jsonFile);
 
-			letra = fgetc(TDAJson->jsonFile);
+                while(letra != 34) /*mientras no cierre comilla, leo y guardo en Elem.id*/
+                {
+                    Elem.id[i] = letra;
+                    i++;
+                    letra = fgetc(TDAJson->jsonFile);
+                }
+                Elem.id[i] = '\0';
+                strcpy(palabra_ant, Elem.id);
+            }
+            if (letra>=48 && letra<=57){ /*si es numero*/
+                while(letra>=48 && letra<=57) /*mientras que sean numeros, leo y guardo en Elem.id*/
+                {
+                    Elem.id[i] = letra;
+                    i++;
+                    letra = fgetc(TDAJson->jsonFile);
+                }
+                Elem.id[i] = '\0';
+                Elem.estado=Valor; /*si es un numero, solo puede ser Valor, no puede ser ni Abierto ni Cerrado*/
+                if (Elem.id[0] != '\0')
+					error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
+                /*si guarde un numero como Valor, tengo que cerrar lo anterior que abri*/
+                strcpy(Elem.id,vector[tope]);
+				Elem.estado = Cerrado;
+				if (Elem.id[0] != '\0')
+					error = L_Insertar_Cte(&TDAJson->atributos,L_Siguiente,&Elem);
 
-			while(letra != 34) /*mientras no cierre comilla, leo y guardo en Elem.id*/
-			{
-				Elem.id[i] = letra;
-				i++;
-				letra = fgetc(TDAJson->jsonFile);
-			}
+				vector[tope][0] = '\0';
+				if (tope > 0)
+					tope--;
+                printf("\n%s -CIERRA-", Elem.id);
+            }
 
-			Elem.id[i] = '\0';
 			printf("\n%s", Elem.id);
 
 			strcpy(palabra_ant, Elem.id);
