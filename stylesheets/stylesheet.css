@@ -186,6 +186,8 @@ code {
 pre code {
   display: block;
   box-shadow: none;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 blockquote {
@@ -266,7 +268,9 @@ Full-Width Styles
 
 .inner {
   position: relative;
-  max-width: 640px;
+  /*max-width: 640px;*/
+  max-width: 50%;
+  min-width: 640px;
   padding: 20px 10px;
   margin: 0 auto;
 }
@@ -385,6 +389,7 @@ Small Device Styles
 
   .inner {
     /*min-width: 320px;*/
+    min-width: 80%;
     max-width: 90%;/*480px;*/
   }
 
@@ -418,8 +423,9 @@ Small Device Styles
 
   code, pre {
     /*min-width: 320px;*/
+    min-width: 80%;
     max-width: 90%;/*480px;*/
-    font-size: 11px;
+    /*font-size: 11px;*/
   }
 
 }
