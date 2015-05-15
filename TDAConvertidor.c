@@ -9,6 +9,8 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 	int error;
 
+	TElem Elem;
+
 	/*Malloc*/
 	if ((tc->xml.xmlFile = fopen(rutaXml, "r")) == NULL)
 	{
@@ -24,6 +26,22 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		fprintf(stderr,"%d\n",error);
 		return error;
 	}
+
+	if (L_Vacia (tc->xml.atributos) == TRUE)
+		return -4;
+
+	error = L_Mover_Cte(&tc->xml.atributos,L_Primero);
+
+	while (error == OK)
+	{
+		L_Elem_Cte(tc->xml.atributos,&Elem);
+
+		L_Insertar_Cte(&tc->json.atributos,L_Siguiente,&Elem);
+
+		error = L_Mover_Cte(&tc->xml.atributos,L_Siguiente);
+	}
+
+	strcpy(tc->json.tagPrincipal,tc->xml.tagPrincipal);
 
 	error = jsonGuardar(&tc->json, rutaJson);
 
@@ -42,6 +60,8 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 	int error;
 
+	TElem Elem;
+
 	/*Malloc*/
 	if ((tc->json.jsonFile = fopen(rutaJson, "r")) == NULL)
 	{
@@ -59,7 +79,20 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 	}
 
 	if (L_Vacia (tc->json.atributos) == TRUE)
-		return error;
+		return -4;
+
+	error = L_Mover_Cte(&tc->json.atributos,L_Primero);
+
+	while (error == OK)
+	{
+		L_Elem_Cte(tc->json.atributos,&Elem);
+
+		L_Insertar_Cte(&tc->xml.atributos,L_Siguiente,&Elem);
+
+		error = L_Mover_Cte(&tc->json.atributos,L_Siguiente);
+	}
+
+	strcpy(tc->xml.tagPrincipal,tc->json.tagPrincipal);
 
 	error = xmlGuardar(&tc->xml, rutaXml);
 
