@@ -318,10 +318,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	strcpy(TDAJson->tagPrincipal, Elem.id); /*el primer elemento de la lista será el tag principal*/
 	L_Borrar_Cte(&TDAJson->atributos); /*borro el primero, que es la apertura del tag principal*/
 
-	if (error != 1)
-		return error;
-
-	return 0;
+	return error;
 
 }
 
@@ -360,14 +357,14 @@ int jsonGuardar(TDAJSON *TDAJson, char *rutaJson)
 	int CantCierres = 0;
 
 	if (L_Vacia(TDAJson->atributos) == TRUE)
-		return -1;
+		return -4;
 
 	Atributo_Llave[0] = '\0';
 	Atributo_Llave_Nivel2[0] = '\0';
 	Atr_Aux[0] = '\0';
 
 	if ((arch = fopen(rutaJson, "w")) == NULL) /* No se pudo abrir el archivo */
-		return -1;
+		return -2;
 
 	/* Escribo el tagPrincipal */
 	fputc('{', arch);
@@ -687,5 +684,5 @@ int jsonGuardar(TDAJSON *TDAJson, char *rutaJson)
 	/* Cierro el archivo */
 	fclose(arch);
 
-	return 0;
+	return TRUE;
 }

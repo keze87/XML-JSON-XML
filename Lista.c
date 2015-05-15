@@ -33,10 +33,10 @@ int L_Mover_Cte(TListaSimple *pLs, TMovimiento_Ls M)
 {
 	switch (M)
 	{
-		case L_Primero: 
+		case L_Primero:
 			pLs->Corriente=pLs->Primero;
 		break;
-		case L_Siguiente: 
+		case L_Siguiente:
 			if (pLs->Corriente->Siguiente==NULL)
 				return FALSE;
 			else
@@ -89,7 +89,7 @@ int L_Insertar_Cte(TListaSimple *pLs, TMovimiento_Ls M, void* pE)
 	memcpy(pNodo->Elem, pE, pLs->TamanioDato);
 	if ((pLs->Primero == NULL) || (M==L_Primero) || ((M==L_Anterior) && (pLs->Primero==pLs->Corriente)))
 	{
-		/*Si est� vac�a o hay que insertar en el Primero o
+		/*Si está vacía o hay que insertar en el Primero o
 		hay que insertar en el Anterior y el actual es el Primero */
 		pNodo->Siguiente = pLs->Primero;
 		pLs->Primero = pLs->Corriente = pNodo;

@@ -147,9 +147,6 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	fclose(TDAXml->xmlFile);
 
-	if (error == TRUE)
-		error = 0;
-
 	return error;
 
 }
@@ -171,7 +168,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 		arch = fopen(rutaXml,"w");
 
 		if (arch == NULL) /* No se pudo abrir el archivo */
-			return -1;
+			return -2;
 
 		/* Escribo el tagPrincipal */
 		EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
@@ -235,7 +232,7 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 				default:
 					break;
 			}
-		} while (code != 0);
+		} while (code != FALSE);
 
 		/* Cierro el tagPrincipal */
 		EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
@@ -244,7 +241,9 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 		fclose(arch);
 
 	}
+	else
+		return -4;
 
-	return 0;
+	return TRUE;
 
 }

@@ -2,8 +2,7 @@
 #include "TDAJSON.h"
 #include "TDAXML.h"
 
-#define OK 0
-#define NO 1
+#define OK 1
 
 int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 {
@@ -14,7 +13,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 	if ((tc->xml.xmlFile = fopen(rutaXml, "r")) == NULL)
 	{
 		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
-		return -2;
+		return -3;
 	}
 	/*Malloc*/
 
@@ -47,7 +46,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 	if ((tc->json.jsonFile = fopen(rutaJson, "r")) == NULL)
 	{
 		fprintf(stderr,"La ruta %s no es valida\n", rutaJson);
-		return -2;
+		return -3;
 	}
 	/*Malloc*/
 
@@ -58,6 +57,9 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 		fprintf(stderr,"%d\n",error);
 		return error;
 	}
+
+	if (L_Vacia (tc->json.atributos) == TRUE)
+		return error;
 
 	error = xmlGuardar(&tc->xml, rutaXml);
 
@@ -87,8 +89,8 @@ TDAConvertidor *CrearTC()
 
 	if ((tc->json.tagPrincipal = (char*)malloc(CANTMAX)) == NULL)
 	{
-		free(tc);
 		free(tc->xml.tagPrincipal);
+		free(tc);
 		return NULL;
 	}
 

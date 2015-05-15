@@ -2,13 +2,14 @@
 #include <string.h>
 #include "TDAConvertidor.h"
 
-#define MAX_LONG_RUTA 100
+#define MAX_LONG_RUTA 255
 #define C_NULO '\0'
 
 #define WRONG_OPE "La operación ingresada es incorrecta.\nDebe ser una de las siguientes:\n-xml2json\n-json2xml\n"
 #define OUT_OF_MEM "No existe suficiente memoria.\n"
 #define RUTA_ORIGEN "Debe ingresar una ruta de origen a la que se pueda acceder para lectura.\n Debe ubicarse seguido de la operación a realizar.\n"
 #define RUTA_DESTINO "Debe ingresar una ruta de destino a la que se pueda acceder para escritura.\n Debe ubicarse seguido de la ruta de origen.\n"
+#define LISTA_VACIA "Archivo de entrada vacio.\n"
 
 typedef enum {
 	VACIO, /* Aún no se detectó la operación */
@@ -18,10 +19,11 @@ typedef enum {
 } tOperacion;
 
 typedef enum {
-	SUCCESS, /* Éxito */
-	MEM, /* Error de memoria */
-	ORIG, /* Error en la ruta de origen */
-	DEST /* Error en la ruta de destino */
+	SUCCESS = 1, /* Éxito */
+	MEM = -1, /* Error de memoria */
+	ORIG = -3, /* Error en la ruta de origen */
+	DEST = -2, /* Error en la ruta de destino */
+	LISTA = -4 /* Lista Vacia */
 } tError;
 
 /* Funcion que se encarga de identificar la operación a realizar
@@ -60,6 +62,11 @@ void MostrarMensajeError(tError Code)
 		case(DEST):
 		{
 			printf(RUTA_DESTINO);
+			break;
+		}
+		case(LISTA):
+		{
+			printf(LISTA_VACIA);
 			break;
 		}
 		case(SUCCESS): break;

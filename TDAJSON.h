@@ -13,7 +13,7 @@ typedef struct TDAJSON {
 /* @param  TDAXml estrucutra que se inicializará y cargará a partir de rutaJson
  * @param  rutaJson path del archivo xml
  * @pre    -
- * @post   Si se puede cargar la estructura, devuelve 0
+ * @post   Si se puede cargar la estructura, devuelve 1
  * @post   Si no se puede crear la estructura por falta de memoria, devuelve -1
  * @post   Si no se puede crear la estructura porque no se puede acceder a la ruta para lectura,
  *         devuelve -2
@@ -24,7 +24,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson);
 /* @param  TDAJson estructura que se guardará en un archivo
  * @param  rutaJson path de destino
  * @pre    TDAJson creado y cargado
- * @post   Si se puede grabar la estructura en un archivo, devuelve 0
+ * @post   Si se puede grabar la estructura en un archivo, devuelve 1
  * @post   Si no existe suficiente memoria, devuelve -1
  * @post   Si no se puede acceder a la ruta para escritura, devuelve -2
  */
