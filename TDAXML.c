@@ -145,6 +145,8 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 	L_Borrar_Cte(&TDAXml->atributos); /* Elimino el cierre de tagPrincipal */
 
+	fclose(TDAXml->xmlFile);
+
 	if (error == TRUE)
 		error = 0;
 
@@ -156,23 +158,25 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 {
 
 	TElem Aux;
-	FILE *arch = fopen(rutaXml,"w");
+	FILE *arch;
 
 	int code = 0;
 	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
 	int LeerElemento = TRUE;
 
-	if (arch == NULL) /* No se pudo abrir el archivo */
-		return -1;
-
-	/* Escribo el tagPrincipal */
-	EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
-	fputc('\n', arch);
-	EscribirTabs_XML(++nivel, arch);
-
 	/* Comienzo a recorrer la lista de atributos */
 	if (L_Vacia(TDAXml->atributos) == 0)
 	{
+
+		arch = fopen(rutaXml,"w");
+
+		if (arch == NULL) /* No se pudo abrir el archivo */
+			return -1;
+
+		/* Escribo el tagPrincipal */
+		EscribirAtributo_Apertura(TDAXml->tagPrincipal,arch);
+		fputc('\n', arch);
+		EscribirTabs_XML(++nivel, arch);
 
 		code = L_Mover_Cte(&(TDAXml->atributos),L_Primero);
 		do
@@ -232,13 +236,14 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 					break;
 			}
 		} while (code != 0);
+
+		/* Cierro el tagPrincipal */
+		EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
+
+		/* Cierro el archivo */
+		fclose(arch);
+
 	}
-
-	/* Cierro el tagPrincipal */
-	EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
-
-	/* Cierro el archivo */
-	fclose(arch);
 
 	return 0;
 

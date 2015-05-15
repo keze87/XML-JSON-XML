@@ -49,7 +49,7 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml);
  * POST: Asigna memoria a la estructura
  *       En caso de error devuelve -1
  */
-int CrearTC(TDAConvertidor *tc);
+TDAConvertidor *CrearTC();
 
 /* PRE:  tc creado
  * POST: Libera la memoria asignada a la estructura

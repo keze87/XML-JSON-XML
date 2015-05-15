@@ -68,14 +68,14 @@ void MostrarMensajeError(tError Code)
 
 int main(int argc, char *argv[])
 {
-	TDAConvertidor* TC = NULL;
+	TDAConvertidor* TC = CrearTC();
 	tOperacion Ope = VACIO;
 	tError Code = SUCCESS;
 	char* RutaOrigen;
 	char* RutaDestino;
 	int i = 1;
 
-	if (CrearTC(TC) != 0)
+	if (TC == NULL)
 		Code = MEM;
 
 	RutaOrigen = malloc(MAX_LONG_RUTA);

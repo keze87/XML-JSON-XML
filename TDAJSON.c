@@ -2,7 +2,7 @@
 #include "Lista.h"
 #include "TDAConvertidor.h"
 
-#define CANTMAX 255 /*tamaño maximo de linea*/
+#define CANTMAX 255 /*tamaño máximo de linea*/
 #define TAM_ELEM 200
 
 #define DELIM_FIN ": {" /* String luego de un DELIM */
@@ -45,7 +45,7 @@ void EscribirCierre(int nivel, int long_atributo, FILE* arch)
 	fputc('\n', arch);
 }
 
-/* Funcion que se encarga de incrementar LongAtributo, que se utilizará para:
+/* Función que se encarga de incrementar LongAtributo, que se utilizará para:
  * - Escribir tabs cuando existen corchetes
  * - Escribir las llaves */
 void AgregarLongitudAtributo(int *long_atributo,int sumando)
@@ -79,7 +79,7 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 	char palabra_ant[CANTMAX]; /*la uso por si se repite con el corchete*/
 
 	int i = 0, tope = -1, error = 0;
-	int primero_multiple = TRUE; /*flag para saber si es la primera vez que se escribe un atributo multiple*/
+	int primero_multiple = TRUE; /*flag para saber si es la primera vez que se escribe un atributo múltiple*/
 	char vector[4][CANTMAX];
 
 	/*inicializo*/
@@ -360,7 +360,7 @@ int jsonGuardar(TDAJSON *TDAJson, char *rutaJson)
 	int CantCierres = 0;
 
 	if (L_Vacia(TDAJson->atributos) == TRUE)
-		return 1;
+		return -1;
 
 	Atributo_Llave[0] = '\0';
 	Atributo_Llave_Nivel2[0] = '\0';
