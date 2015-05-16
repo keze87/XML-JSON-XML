@@ -30,7 +30,7 @@ typedef struct TElem{
  * @post   Si no existe suficiente memoria, devuelve -1
  * @post   Si no se puede acceder a rutaXml para lectura, devuelve -2
  * @post   Si no se puede acceder a rutaJson para escritura, devuelve -3
- * */
+ */
 int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson);
 
 /* @param  rutaJson  ruta dónde se se encuentra el archivo JSON
@@ -49,11 +49,14 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml);
  */
 TDAConvertidor *CrearTC();
 
-/* PRE:  tc creado
- * POST: Libera la memoria asignada a la estructura
+/* @pre    tc creado
+ * @post   Libera la memoria asignada a la estructura
  */
 void DestruirTC(TDAConvertidor *tc);
 
+/* @pre    Listas Destino y Origen creadas
+ * @post   Los Elementos de Origen quedan en Destino
+ */
 int CopiarLista (TListaSimple *Destino, TListaSimple *Origen);
 
 #endif /* __TDAConvertidor_H__ */

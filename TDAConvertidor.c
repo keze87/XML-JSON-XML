@@ -26,6 +26,12 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 	error = CopiarLista(&tc->json.atributos,&tc->xml.atributos);
 
+	if (error != OK)
+	{
+		fprintf(stderr,"%d\n",error);
+		return error;
+	}
+
 	strcpy(tc->json.tagPrincipal,tc->xml.tagPrincipal);
 
 	error = jsonGuardar(&tc->json, rutaJson);
@@ -62,13 +68,13 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 	error = CopiarLista(&tc->xml.atributos,&tc->json.atributos);
 
-	strcpy(tc->xml.tagPrincipal,tc->json.tagPrincipal);
-
 	if (error != OK)
 	{
 		fprintf(stderr,"%d\n",error);
 		return error;
 	}
+
+	strcpy(tc->xml.tagPrincipal,tc->json.tagPrincipal);
 
 	error = xmlGuardar(&tc->xml, rutaXml);
 
