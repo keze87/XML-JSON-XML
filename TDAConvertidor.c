@@ -9,15 +9,12 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 
 	int error;
 
-	TElem Elem;
-
-	/*Malloc*/
+	/*Archivo*/
 	if ((tc->xml.xmlFile = fopen(rutaXml, "r")) == NULL)
 	{
 		fprintf(stderr,"La ruta %s no es valida\n", rutaXml);
 		return -3;
 	}
-	/*Malloc*/
 
 	error = xmlCargar(&tc->xml, rutaXml);
 
@@ -27,19 +24,7 @@ int xml2json(TDAConvertidor *tc, char *rutaXml, char *rutaJson)
 		return error;
 	}
 
-	if (L_Vacia (tc->xml.atributos) == TRUE)
-		return -4;
-
-	error = L_Mover_Cte(&tc->xml.atributos,L_Primero);
-
-	while (error == OK)
-	{
-		L_Elem_Cte(tc->xml.atributos,&Elem);
-
-		L_Insertar_Cte(&tc->json.atributos,L_Siguiente,&Elem);
-
-		error = L_Mover_Cte(&tc->xml.atributos,L_Siguiente);
-	}
+	error = CopiarLista(&tc->json.atributos,&tc->xml.atributos);
 
 	strcpy(tc->json.tagPrincipal,tc->xml.tagPrincipal);
 
@@ -60,15 +45,12 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 
 	int error;
 
-	TElem Elem;
-
-	/*Malloc*/
+	/*Archivo*/
 	if ((tc->json.jsonFile = fopen(rutaJson, "r")) == NULL)
 	{
 		fprintf(stderr,"La ruta %s no es valida\n", rutaJson);
 		return -3;
 	}
-	/*Malloc*/
 
 	error = jsonCargar(&tc->json, rutaJson);
 
@@ -78,21 +60,15 @@ int json2xml(TDAConvertidor *tc, char *rutaJson, char *rutaXml)
 		return error;
 	}
 
-	if (L_Vacia (tc->json.atributos) == TRUE)
-		return -4;
-
-	error = L_Mover_Cte(&tc->json.atributos,L_Primero);
-
-	while (error == OK)
-	{
-		L_Elem_Cte(tc->json.atributos,&Elem);
-
-		L_Insertar_Cte(&tc->xml.atributos,L_Siguiente,&Elem);
-
-		error = L_Mover_Cte(&tc->json.atributos,L_Siguiente);
-	}
+	error = CopiarLista(&tc->xml.atributos,&tc->json.atributos);
 
 	strcpy(tc->xml.tagPrincipal,tc->json.tagPrincipal);
+
+	if (error != OK)
+	{
+		fprintf(stderr,"%d\n",error);
+		return error;
+	}
 
 	error = xmlGuardar(&tc->xml, rutaXml);
 
@@ -143,4 +119,31 @@ void DestruirTC(TDAConvertidor *tc)
 	free(tc->json.tagPrincipal);
 
 	free(tc);
+}
+
+int CopiarLista (TListaSimple *Destino, TListaSimple *Origen)
+{
+
+	int error = FALSE;
+
+	TElem Elem;
+
+	if (L_Vacia (*Origen) == TRUE)
+		return -4;
+
+	L_Mover_Cte(Origen,L_Primero);
+
+	while (error == FALSE)
+	{
+		L_Elem_Cte(*Origen,&Elem);
+
+		L_Insertar_Cte(Destino,L_Siguiente,&Elem);
+
+		L_Borrar_Cte(Origen);
+
+		error = L_Vacia (*Origen);
+	}
+
+	return TRUE;
+
 }

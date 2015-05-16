@@ -54,6 +54,8 @@ TDAConvertidor *CrearTC();
  */
 void DestruirTC(TDAConvertidor *tc);
 
+int CopiarLista (TListaSimple *Destino, TListaSimple *Origen);
+
 #endif /* __TDAConvertidor_H__ */
 
 
