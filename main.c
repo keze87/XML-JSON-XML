@@ -33,11 +33,11 @@ typedef enum {
  */
 void Inicializar(char *arg, tOperacion *Ope)
 {
-	if ((strcmp(arg,"-xml2json") == 0))
+	if ((strcmp(arg,"-xml2json") == 0)||(strcmp(arg,"xml2json") == 0))
 		*Ope = XML2JSON;
 	else
 	{
-		if ((strcmp(arg,"-json2xml") == 0))
+		if ((strcmp(arg,"-json2xml") == 0)||(strcmp(arg,"json2xml") == 0))
 			*Ope = JSON2XML;
 		else
 			*Ope = ERROR;
