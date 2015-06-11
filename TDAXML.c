@@ -112,7 +112,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 				cont = 0;
 
-				while (letra != '<') /* Leo y voy guardando hasta que encuentre < */
+				while ((cont < 201) && (letra != '<')) /* Leo y voy guardando hasta que encuentre < */
 				{
 
 					Elem.id[cont] = letra;
@@ -125,6 +125,10 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 					cont++;
 
 				}
+
+				if (cont == 201)
+					while (letra != '<')
+						letra = fgetc(TDAXml->xmlFile);
 
 				Elem.id[cont] = '\0';
 
