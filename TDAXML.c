@@ -67,7 +67,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			else
 				Elem.estado = Abierto;
 
-			while (letra != '>') /* Leo y voy guardando hasta que encuentre > */
+			while ((cont < CANTMAX) && (letra != '>')) /* Leo y voy guardando hasta que encuentre > */
 			{
 
 				Elem.id[cont] = letra;
@@ -80,6 +80,10 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 				cont++;
 
 			}
+
+			if (cont == CANTMAX)
+					while (letra != '>')
+						letra = fgetc(TDAXml->xmlFile);
 
 			Elem.id[cont] = '\0';
 
@@ -112,7 +116,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 				cont = 0;
 
-				while ((cont < 201) && (letra != '<')) /* Leo y voy guardando hasta que encuentre < */
+				while ((cont < CANTMAX) && (letra != '<')) /* Leo y voy guardando hasta que encuentre < */
 				{
 
 					Elem.id[cont] = letra;
@@ -126,7 +130,7 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 
 				}
 
-				if (cont == 201)
+				if (cont == CANTMAX)
 					while (letra != '<')
 						letra = fgetc(TDAXml->xmlFile);
 

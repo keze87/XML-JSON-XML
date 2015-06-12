@@ -4,7 +4,7 @@
 #include "TDAXML.h"
 #include "TDAJSON.h"
 
-#define CANTMAX 255
+#define CANTMAX 2901
 
 typedef enum TInterruptor{
 	Abierto = 0,
