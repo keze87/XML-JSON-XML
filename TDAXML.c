@@ -82,8 +82,8 @@ int xmlCargar(TDAXML *TDAXml, char *rutaXml)
 			}
 
 			if (cont == CANTMAX)
-					while (letra != '>')
-						letra = fgetc(TDAXml->xmlFile);
+				while (letra != '>')
+					letra = fgetc(TDAXml->xmlFile);
 
 			Elem.id[cont] = '\0';
 
