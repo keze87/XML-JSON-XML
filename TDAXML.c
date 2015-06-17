@@ -6,7 +6,8 @@
 void EscribirTabs_XML(int cant, FILE* arch)
 {
 	while (cant-- > 0)
-		fputc('\t', arch);
+		/*fputc('\t', arch);*/
+		fputs("   ", arch);
 }
 
 /* Funcion que escribe la apertura de un atributo en un archivo */
@@ -169,6 +170,9 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 	int nivel = 0; /* Se utiliza para saber cuantos "tabs" imprimir en el archivo */
 	int LeerElemento = TRUE;
 
+	int PrimerNivel2 = TRUE;
+	int PrimerNoNivel2 = TRUE;
+
 	/* Comienzo a recorrer la lista de atributos */
 	if (L_Vacia(TDAXml->atributos) == 0)
 	{
@@ -207,6 +211,13 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 					if (Aux.estado == Abierto)
 					{
 						fputc('\n', arch);
+
+						if ((nivel == 1) && (PrimerNivel2 == TRUE))
+							PrimerNivel2 = FALSE;
+						else
+							if (nivel == 1)
+								nivel++;
+
 						EscribirTabs_XML(++nivel,arch);
 					}
 
@@ -223,6 +234,12 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 					{
 						L_Elem_Cte(TDAXml->atributos,&Aux);
 						LeerElemento = FALSE;
+
+						if ((nivel == 3) && (PrimerNivel2 == FALSE) && (PrimerNoNivel2 == TRUE))
+							PrimerNoNivel2 = FALSE;
+						else
+							if ((nivel == 3) && (PrimerNivel2 == FALSE))
+								nivel--;
 
 						if (Aux.estado == Cerrado)
 							EscribirTabs_XML(--nivel,arch);
@@ -244,6 +261,9 @@ int xmlGuardar(TDAXML *TDAXml, char *rutaXml)
 
 		/* Cierro el tagPrincipal */
 		EscribirAtributo_Cierre(TDAXml->tagPrincipal,arch);
+
+		if (TDAXml->tagPrincipal[strlen(TDAXml->tagPrincipal)] != '\n')
+			fputc('\n', arch);
 
 		/* Cierro el archivo */
 		fclose(arch);
