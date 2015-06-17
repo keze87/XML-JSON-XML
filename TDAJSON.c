@@ -143,6 +143,8 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 			/*obtengo una letra mas y me fijo si es un ":"*/
 			letra = fgetc(TDAJson->jsonFile);
+			while (letra==32 || letra==10 || letra==9) /*mientras que no sea espacio o enter o tab*/
+                		letra = fgetc(TDAJson->jsonFile);
 
 			if (letra == ':')
 			{
@@ -215,8 +217,10 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 					Elem.id[i] = '\0';
 
 					letra_ant = letra;
-					letra = fgetc(TDAJson->jsonFile); /*obtengo una letra mas y me fijo si es un ":"*/
-
+					letra = fgetc(TDAJson->jsonFile);
+                    			while (letra==32 || letra==10 || letra==9) /*mientras que no sea espacio o enter o tab*/
+                        			letra = fgetc(TDAJson->jsonFile);
+                        
 					if(letra == '}') /*si cierra la llave, tengo que cerrar y volver a abrir el id*/
 					{
 
@@ -284,12 +288,16 @@ int jsonCargar(TDAJSON *TDAJson, char *rutaJson)
 
 				letra_ant = letra;
 				letra = fgetc(TDAJson->jsonFile);
+        			while (letra==32 || letra==10 || letra==9) /*mientras que no sea espacio o enter o tab*/
+                    			letra = fgetc(TDAJson->jsonFile);
 
 			}
 
 		}
 
 		letra = fgetc(TDAJson->jsonFile);
+		while (letra==32 || letra==10 || letra==9) /*mientras que no sea espacio o enter o tab*/
+			letra = fgetc(TDAJson->jsonFile);
 
 	}
 
